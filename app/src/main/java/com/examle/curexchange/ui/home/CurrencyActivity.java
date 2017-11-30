@@ -1,9 +1,11 @@
-package com.examle.curexchange;
+package com.examle.curexchange.ui.home;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.examle.curexchange.R;
+import com.examle.curexchange.ui.base.BaseActivity;
+
+public class CurrencyActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
