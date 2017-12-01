@@ -1,6 +1,5 @@
 package com.examle.curexchange.data.database;
 
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -23,7 +22,6 @@ public class CurrencyProvider extends ContentProvider {
                 CurrencyContract.PATH_CURRENCY,
                 CURRENCY_MATCHER);
     }
-
 
     @Override
     public boolean onCreate() {
@@ -53,7 +51,6 @@ public class CurrencyProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
