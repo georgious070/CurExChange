@@ -2,6 +2,7 @@ package com.examle.curexchange.data.database;
 
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -38,20 +39,51 @@ public class CurrencyProvider extends ContentProvider {
                         @Nullable String selection,
                         @Nullable String[] selectionArgs,
                         @Nullable String sortOrder) {
-        return null;
+        Cursor cursor;
+        switch (uriMatcher.match(uri)) {
+            case CURRENCY_MATCHER:
+                cursor = sqLiteDatabase.query(CurrencyContract.CurrencyEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        switch (uriMatcher.match(uri)) {
+            case CURRENCY_MATCHER:
+                return CurrencyContract.CurrencyEntry.CONTENT_LIST_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match");
+        }
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri,
                       @Nullable ContentValues values) {
-        return null;
+        long rawId;
+        switch (uriMatcher.match(uri)) {
+            case CURRENCY_MATCHER:
+                rawId = sqLiteDatabase.insert(CurrencyContract.CurrencyEntry.TABLE_NAME, null, values);
+                break;
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+        Uri resultUri = ContentUris.withAppendedId(uri, rawId);
+        getContext().getContentResolver().notifyChange(resultUri, null);
+        return resultUri;
     }
 
     @Override
