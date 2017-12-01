@@ -1,6 +1,8 @@
 package com.examle.curexchange.ui.base;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-public class BasePresenter<T extends BaseView> extends MvpPresenter<BaseView> {
+@InjectViewState
+public class BasePresenter<T extends BaseView> extends MvpPresenter<T> {
 }

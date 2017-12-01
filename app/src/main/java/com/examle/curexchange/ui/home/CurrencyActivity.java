@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 
-public class CurrencyActivity extends BaseActivity {
+public class CurrencyActivity extends BaseActivity implements CurrencyView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
