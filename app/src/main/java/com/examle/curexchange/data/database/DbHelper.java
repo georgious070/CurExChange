@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
 
-import java.util.Currency;
-
 public class DbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "currency.db";
