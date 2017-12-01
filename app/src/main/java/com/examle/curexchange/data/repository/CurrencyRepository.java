@@ -1,11 +1,9 @@
 package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Build;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.model.crypto_code.CryptoCode;
@@ -27,12 +25,12 @@ public class CurrencyRepository {
 
     private List<String> names;
     private final List<Row> rows;
-    //private ContentValues[] codesContentValues;
     private ApiCryptoCode apiCryptoCode;
     private AsyncQueryHandler myHandler;
 
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode) {
+        this.names = new ArrayList<>();
         this.rows = new ArrayList<>();
         this.apiCryptoCode = apiCryptoCode;
     }
@@ -53,10 +51,9 @@ public class CurrencyRepository {
                     helpCV = new ContentValues(contentValues);
                     codesContentValues[i]= helpCV;
                 }
-                contentValues.clear();
 
                 MyAsync myAsync = new MyAsync(waitForInsertCallback);
-                myAsync.execute();
+                myAsync.execute(codesContentValues);
             }
 
             @Override
@@ -75,32 +72,26 @@ public class CurrencyRepository {
         });
     }
 
+    @SuppressLint("HandlerLeak")
     private void queryData(final CurrencyCallback currencyCallback) {
         String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
 
-        App.getApp().getContentResolver().query(CurrencyEntry.CONTENT_URI,
+        myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
+            @Override
+            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+                super.onQueryComplete(token, cookie, cursor);
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    cursor.moveToNext();
+                   names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
+                }
+                cursor.close();
+                currencyCallback.onSuccess(names);
+            }
+        };
+        myHandler.startQuery(0, null, CurrencyEntry.CONTENT_URI,
                 projectionCurrency,
                 null,
                 null,
-                null,
                 null);
-
-//        myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
-//            @Override
-//            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-//                super.onQueryComplete(token, cookie, cursor);
-//                for (int i = 0; i < cursor.getCount(); i++) {
-//                    cursor.moveToNext();
-//                   names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
-//                }
-//                cursor.close();
-//                currencyCallback.onSuccess(names);
-//            }
-//        };
-//        myHandler.startQuery(0, null, CurrencyEntry.CONTENT_URI,
-//                projectionCurrency,
-//                null,
-//                null,
-//                null);
     }
 }

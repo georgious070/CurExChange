@@ -85,17 +85,7 @@ public class CurrencyProvider extends ContentProvider {
         return resultUri;
     }
 
-    @Override
-    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
 
-        int count = 0;
-        
-        for (ContentValues value : values) {
-            App.getApp().getContentResolver().insert(uri, value);
-            count++;
-        }
-        return count;
-    }
 
     @Override
     public int delete(@NonNull Uri uri,

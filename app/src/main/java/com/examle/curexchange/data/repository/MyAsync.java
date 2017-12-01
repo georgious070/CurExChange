@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
-import com.examle.curexchange.ui.home.CurrencyCallback;
 
 public class MyAsync extends AsyncTask<ContentValues, Void, Void> {
 
@@ -19,8 +18,9 @@ public class MyAsync extends AsyncTask<ContentValues, Void, Void> {
     @Override
     protected Void doInBackground(ContentValues... contentValues) {
 
-        App.getApp().getContentResolver()
-                .bulkInsert(CurrencyContract.CurrencyEntry.CONTENT_URI, contentValues);
+        for (ContentValues value : contentValues) {
+            App.getApp().getContentResolver().insert(CurrencyContract.CurrencyEntry.CONTENT_URI, value);
+        }
         return null;
     }
 
