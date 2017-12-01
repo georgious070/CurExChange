@@ -35,4 +35,8 @@ dependencies {
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
     compile "com.arello-mobile:moxy-android:1.4.5"
     annotationProcessor "com.arello-mobile:moxy-compiler:1.4.5"
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 }
