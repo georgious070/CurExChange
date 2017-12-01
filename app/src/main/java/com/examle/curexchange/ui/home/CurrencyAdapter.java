@@ -8,8 +8,23 @@ import android.widget.TextView;
 
 import com.examle.curexchange.R;
 
+import java.util.List;
+
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
 
+    private final List<String> currenciesList;
+    private OnRecyclerItemClickedListener listener;
+
+    public CurrencyAdapter(List<String> currencyList, OnRecyclerItemClickedListener listener) {
+        this.currenciesList = currencyList;
+        this.listener = listener;
+    }
+
+    public void setData(List<String> currenciesList) {
+        this.currenciesList.clear();
+        this.currenciesList.addAll(currenciesList);
+        notifyDataSetChanged();
+    }
 
     @Override
     public CurrencyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -21,13 +36,24 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(CurrencyAdapter.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(final CurrencyAdapter.ViewHolder holder, int position) {
+        holder.firstCurrencyName.setText(currenciesList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClicked();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return currenciesList.size();
+    }
+
+    public interface OnRecyclerItemClickedListener {
+
+        void onClicked();
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
