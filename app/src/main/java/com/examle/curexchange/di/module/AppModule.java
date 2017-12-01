@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.Constants;
-import com.examle.curexchange.data.remote.CryptoCodeApi;
-import com.examle.curexchange.data.remote.ExchangeApi;
+import com.examle.curexchange.data.remote.ApiCryptoCode;
+import com.examle.curexchange.data.remote.ApiExchange;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -42,8 +42,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    CryptoCodeApi provideCryptoCodeApi(@Named("codes") Retrofit retrofit) {
-        return retrofit.create(CryptoCodeApi.class);
+    ApiCryptoCode provideCryptoCodeApi(@Named("codes") Retrofit retrofit) {
+        return retrofit.create(ApiCryptoCode.class);
     }
 
     @Provides
@@ -58,7 +58,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    ExchangeApi provideExchangeApi(@Named("exchange") Retrofit retrofit) {
-        return retrofit.create(ExchangeApi.class);
+    ApiExchange provideExchangeApi(@Named("exchange") Retrofit retrofit) {
+        return retrofit.create(ApiExchange.class);
     }
 }
