@@ -17,7 +17,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String SQL_CREATE_CURRENCY_TABLE = "CREATE TABLE " + CurrencyEntry.TABLE_NAME + "("
+        String SQL_CREATE_CURRENCY_TABLE = "CREATE TABLE " + CurrencyEntry.TABLE_NAME + " ("
                 + CurrencyEntry.COLUMN_CODE + " TEXT PRIMARY KEY,"
                 + CurrencyEntry.COLUMN_CRYPTO_NAME + " TEXT);";
         db.execSQL(SQL_CREATE_CURRENCY_TABLE);

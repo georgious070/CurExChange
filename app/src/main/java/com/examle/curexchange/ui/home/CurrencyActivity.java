@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import dagger.Provides;
 
 public class CurrencyActivity extends BaseActivity implements CurrencyView,
         CurrencyAdapter.OnRecyclerItemClickedListener {
@@ -30,5 +34,10 @@ public class CurrencyActivity extends BaseActivity implements CurrencyView,
     @Override
     public void onClicked() {
 
+    }
+
+    @Override
+    public void showData(List<String> name) {
+        currencyAdapter.setData(name);
     }
 }

@@ -10,10 +10,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.examle.curexchange.App;
+
 public class CurrencyProvider extends ContentProvider {
 
     private DbHelper dbHelper;
-    private SQLiteDatabase sqLiteDatabase;
+    public SQLiteDatabase sqLiteDatabase;
     private static final int CURRENCY_MATCHER = 100;
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -27,7 +29,7 @@ public class CurrencyProvider extends ContentProvider {
     public boolean onCreate() {
         dbHelper = new DbHelper(getContext());
         sqLiteDatabase = dbHelper.getWritableDatabase();
-        return false;
+        return true;
     }
 
     @Nullable
@@ -81,6 +83,18 @@ public class CurrencyProvider extends ContentProvider {
         Uri resultUri = ContentUris.withAppendedId(uri, rawId);
         getContext().getContentResolver().notifyChange(resultUri, null);
         return resultUri;
+    }
+
+    @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+
+        int count = 0;
+        
+        for (ContentValues value : values) {
+            App.getApp().getContentResolver().insert(uri, value);
+            count++;
+        }
+        return count;
     }
 
     @Override
