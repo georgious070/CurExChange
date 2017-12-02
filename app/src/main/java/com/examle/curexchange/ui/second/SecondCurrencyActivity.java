@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.examle.curexchange.Constants;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 import com.examle.curexchange.ui.adapter.CurrencyAdapter;
@@ -17,21 +18,24 @@ import java.util.List;
 public class SecondCurrencyActivity extends BaseActivity implements SecondCurrencyView,
         CurrencyAdapter.OnRecyclerItemClickedListener {
 
+    private String secondName;
+
     @InjectPresenter
     SecondCurrencyPresenter secondCurrencyPresenter;
     private RecyclerView secondCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
-    private static final String INTENT_KEY = "names";
 
-    public static Intent getIntent(Context context, List<String> names) {
+    public static Intent getIntent(Context context, List<String> names, String firstName) {
         Intent intent = new Intent(context, SecondCurrencyActivity.class);
-        intent.putStringArrayListExtra(INTENT_KEY, (ArrayList<String>) names);
+        intent.putStringArrayListExtra(Constants.INTENT_KEY_NAMES, (ArrayList<String>) names);
+        intent.putExtra(Constants.INTENT_KEY_FIRST_NAME, firstName);
         return intent;
     }
 
     @ProvidePresenter
     SecondCurrencyPresenter providePresenter() {
-        return new SecondCurrencyPresenter(getIntent().getStringArrayListExtra(INTENT_KEY));
+        return new SecondCurrencyPresenter(getIntent().getStringArrayListExtra(Constants.INTENT_KEY_NAMES),
+                getIntent().getStringExtra(Constants.INTENT_KEY_FIRST_NAME));
     }
 
     @Override
@@ -50,7 +54,7 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     }
 
     @Override
-    public void onClicked() {
-
+    public void onClicked(String secondName) {
+        this.secondName = secondName;
     }
 }

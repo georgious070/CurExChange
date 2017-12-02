@@ -9,9 +9,11 @@ import java.util.List;
 public class SecondCurrencyPresenter extends BasePresenter<SecondCurrencyView> {
 
     private List<String> names;
+    private String firstName;
 
-    public SecondCurrencyPresenter(List<String> names) {
+    public SecondCurrencyPresenter(List<String> names, String firstName) {
         this.names = names;
+        this.firstName = firstName;
     }
 
     @Override

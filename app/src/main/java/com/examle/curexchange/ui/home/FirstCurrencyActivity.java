@@ -22,6 +22,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     private RecyclerView firstCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
     private FloatingActionButton firstButton;
+    private String firstName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,8 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     }
 
     @Override
-    public void onClicked(String name) {
-
+    public void onClicked(String firstName) {
+        this.firstName = firstName;
     }
 
     @Override
@@ -53,6 +54,6 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
 
     @Override
     public void handleFloatButton(List<String> names) {
-        startActivity(SecondCurrencyActivity.getIntent(this, names));
+        startActivity(SecondCurrencyActivity.getIntent(this, names, firstName));
     }
 }
