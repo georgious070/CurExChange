@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.examle.curexchange.App;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
+import com.examle.curexchange.ui.second.SecondCurrencyActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,12 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
         firstCurrencyRecyclerView.setAdapter(currencyAdapter);
 
         firstButton = findViewById(R.id.first_float_button_next);
+        firstButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firstCurrencyPresenter.buttonClicked();
+            }
+        });
     }
 
     @Override
@@ -46,12 +54,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     }
 
     @Override
-    public void handleFloatButton() {
-        firstButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(App.getApp(), "Hello", Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void handleFloatButton(List<String> names) {
+        startActivity(SecondCurrencyActivity.getIntent(this, names));
     }
 }

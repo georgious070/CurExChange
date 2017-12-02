@@ -1,9 +1,14 @@
 package com.examle.curexchange.ui.second;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.examle.curexchange.App;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 import com.examle.curexchange.ui.home.CurrencyAdapter;
@@ -18,6 +23,18 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     SecondCurrencyPresenter secondCurrencyPresenter;
     private RecyclerView secondCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
+    private static final String INTENT_KEY = "names";
+
+    public static Intent getIntent(Context context, List<String> names) {
+        Intent intent = new Intent(context, SecondCurrencyActivity.class);
+        intent.putStringArrayListExtra(INTENT_KEY, (ArrayList<String>)names);
+        return intent;
+    }
+
+    @ProvidePresenter
+    SecondCurrencyPresenter providePresenter() {
+        return new SecondCurrencyPresenter(getIntent().getStringArrayListExtra(INTENT_KEY));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +47,7 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
 
     @Override
     public void showData(List<String> names) {
-
+        currencyAdapter.setData(names);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.examle.curexchange.ui.base.BaseView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @StateStrategyType(AddToEndStrategy.class)
@@ -11,5 +12,5 @@ public interface FirstCurrencyView extends BaseView {
 
     void showData(List<String> name);
 
-    void handleFloatButton();
+    void handleFloatButton(List<String> names);
 }
