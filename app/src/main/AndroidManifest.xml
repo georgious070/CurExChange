@@ -2,30 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.examle.curexchange">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:secondName="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
+        android:secondName=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.FirstCurrencyActivity">
+        <activity android:secondName=".ui.home.FirstCurrencyActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:secondName="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:secondName="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.second.SecondCurrencyActivity" />
+        <activity android:secondName=".ui.second.SecondCurrencyActivity" />
 
         <provider
-            android:name=".data.database.CurrencyProvider"
+            android:secondName=".data.database.CurrencyProvider"
             android:authorities="com.example.currency_db" />
 
-        <activity android:name=".ui.result.ExchangeResultActivity"></activity>
+        <activity android:secondName=".ui.result.ExchangeResultActivity"></activity>
     </application>
 
 </manifest>
