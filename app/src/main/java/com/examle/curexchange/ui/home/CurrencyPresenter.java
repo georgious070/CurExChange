@@ -29,5 +29,6 @@ public class CurrencyPresenter extends BasePresenter<CurrencyView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         currencyInteractor.loadData(currencyCallback);
+        getViewState().handleFloatButton();
     }
 }

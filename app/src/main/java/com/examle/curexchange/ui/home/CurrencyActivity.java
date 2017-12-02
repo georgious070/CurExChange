@@ -1,10 +1,14 @@
 package com.examle.curexchange.ui.home;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.examle.curexchange.App;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 
@@ -20,6 +24,7 @@ public class CurrencyActivity extends BaseActivity implements CurrencyView,
     CurrencyPresenter currencyPresenter;
     private RecyclerView firstCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
+    private FloatingActionButton firstButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,8 @@ public class CurrencyActivity extends BaseActivity implements CurrencyView,
         firstCurrencyRecyclerView = findViewById(R.id.recycler_view_first_currency);
         currencyAdapter = new CurrencyAdapter(new ArrayList<String>(), this);
         firstCurrencyRecyclerView.setAdapter(currencyAdapter);
+
+        firstButton = findViewById(R.id.first_float_button);
     }
 
     @Override
@@ -39,5 +46,15 @@ public class CurrencyActivity extends BaseActivity implements CurrencyView,
     @Override
     public void showData(List<String> name) {
         currencyAdapter.setData(name);
+    }
+
+    @Override
+    public void handleFloatButton() {
+        firstButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(App.getApp(), "Hello", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

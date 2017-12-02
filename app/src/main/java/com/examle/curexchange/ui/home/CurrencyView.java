@@ -10,4 +10,6 @@ import java.util.List;
 public interface CurrencyView extends BaseView {
 
     void showData(List<String> name);
+
+    void handleFloatButton();
 }
