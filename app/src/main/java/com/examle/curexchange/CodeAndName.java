@@ -1,6 +1,5 @@
 package com.examle.curexchange;
 
-
 import java.io.Serializable;
 
 public class CodeAndName implements Serializable {
