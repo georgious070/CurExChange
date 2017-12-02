@@ -3,7 +3,9 @@ package com.examle.curexchange.ui.second;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -11,6 +13,7 @@ import com.examle.curexchange.Constants;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 import com.examle.curexchange.ui.adapter.CurrencyAdapter;
+import com.examle.curexchange.ui.result.ExchangeResultActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     SecondCurrencyPresenter secondCurrencyPresenter;
     private RecyclerView secondCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
+    private FloatingActionButton floatingActionButton;
 
     public static Intent getIntent(Context context, List<String> names, String firstName) {
         Intent intent = new Intent(context, SecondCurrencyActivity.class);
@@ -46,11 +50,25 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
         secondCurrencyRecyclerView = findViewById(R.id.recycler_view_second_currency);
         currencyAdapter = new CurrencyAdapter(new ArrayList<String>(), this);
         secondCurrencyRecyclerView.setAdapter(currencyAdapter);
+
+        floatingActionButton = findViewById(R.id.second_float_button_exchange);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                secondCurrencyPresenter.buttonClicked();
+            }
+        });
     }
 
     @Override
     public void showData(List<String> names) {
         currencyAdapter.setData(names);
+    }
+
+    @Override
+    public void handleFloatButton(String firstName) {
+        startActivity(ExchangeResultActivity.getIntent(SecondCurrencyActivity.this,
+                firstName, secondName));
     }
 
     @Override

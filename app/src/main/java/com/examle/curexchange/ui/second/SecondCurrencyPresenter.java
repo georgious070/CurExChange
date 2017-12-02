@@ -21,4 +21,8 @@ public class SecondCurrencyPresenter extends BasePresenter<SecondCurrencyView> {
         super.onFirstViewAttach();
         getViewState().showData(names);
     }
+
+    void buttonClicked() {
+        getViewState().handleFloatButton(firstName);
+    }
 }
