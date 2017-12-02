@@ -10,25 +10,25 @@ import java.util.List;
 import javax.inject.Inject;
 
 @InjectViewState
-public class CurrencyPresenter extends BasePresenter<CurrencyView> {
+public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
     @Inject
     CurrencyInteractor currencyInteractor;
-    private CurrencyCallback currencyCallback = new CurrencyCallback() {
+    private FirstCurrencyCallback firstCurrencyCallback = new FirstCurrencyCallback() {
         @Override
         public void onSuccess(List<String> names) {
             getViewState().showData(names);
         }
     };
 
-    public CurrencyPresenter() {
+    public FirstCurrencyPresenter() {
         App.getApp().getAppComponent().inject(this);
     }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        currencyInteractor.loadData(currencyCallback);
+        currencyInteractor.loadData(firstCurrencyCallback);
         getViewState().handleFloatButton();
     }
 }

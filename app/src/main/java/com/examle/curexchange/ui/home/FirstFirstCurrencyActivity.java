@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.examle.curexchange.App;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
@@ -15,13 +14,11 @@ import com.examle.curexchange.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import dagger.Provides;
-
-public class CurrencyActivity extends BaseActivity implements CurrencyView,
+public class FirstFirstCurrencyActivity extends BaseActivity implements FirstCurrencyView,
         CurrencyAdapter.OnRecyclerItemClickedListener {
 
     @InjectPresenter
-    CurrencyPresenter currencyPresenter;
+    FirstCurrencyPresenter firstCurrencyPresenter;
     private RecyclerView firstCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
     private FloatingActionButton firstButton;

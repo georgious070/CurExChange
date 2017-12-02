@@ -7,7 +7,7 @@ import com.examle.curexchange.ui.base.BaseView;
 import java.util.List;
 
 @StateStrategyType(AddToEndStrategy.class)
-public interface CurrencyView extends BaseView {
+public interface FirstCurrencyView extends BaseView {
 
     void showData(List<String> name);
 

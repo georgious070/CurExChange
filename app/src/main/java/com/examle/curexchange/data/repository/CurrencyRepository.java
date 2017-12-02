@@ -10,7 +10,7 @@ import com.examle.curexchange.data.model.crypto_code.CryptoCode;
 import com.examle.curexchange.data.model.crypto_code.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
-import com.examle.curexchange.ui.home.CurrencyCallback;
+import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,17 +63,17 @@ public class CurrencyRepository {
         });
     }
 
-    public void getNames(final CurrencyCallback currencyCallback){
+    public void getNames(final FirstCurrencyCallback firstCurrencyCallback){
         loadDataCurrencyExchange(new WaitForInsertCallback() {
             @Override
             public void onSuccess() {
-                queryData(currencyCallback);
+                queryData(firstCurrencyCallback);
             }
         });
     }
 
     @SuppressLint("HandlerLeak")
-    private void queryData(final CurrencyCallback currencyCallback) {
+    private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
         String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
 
         myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
@@ -85,7 +85,7 @@ public class CurrencyRepository {
                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
                 }
                 cursor.close();
-                currencyCallback.onSuccess(names);
+                firstCurrencyCallback.onSuccess(names);
             }
         };
         myHandler.startQuery(0, null, CurrencyEntry.CONTENT_URI,
