@@ -3,9 +3,13 @@ package com.examle.curexchange.ui.result;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.examle.curexchange.R;
 
 public class ExchangeResultActivity extends AppCompatActivity {
+
+    @InjectPresenter
+    ExchangeResultPresenter exchangeResultPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
