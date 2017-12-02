@@ -26,13 +26,13 @@ public class FirstFirstCurrencyActivity extends BaseActivity implements FirstCur
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_currency);
+        setContentView(R.layout.activity_first_currency);
 
         firstCurrencyRecyclerView = findViewById(R.id.recycler_view_first_currency);
         currencyAdapter = new CurrencyAdapter(new ArrayList<String>(), this);
         firstCurrencyRecyclerView.setAdapter(currencyAdapter);
 
-        firstButton = findViewById(R.id.first_float_button);
+        firstButton = findViewById(R.id.first_float_button_next);
     }
 
     @Override
