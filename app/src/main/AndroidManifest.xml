@@ -22,8 +22,10 @@
         <activity android:name=".ui.second.SecondCurrencyActivity" />
 
         <provider
-            android:name="com.examle.curexchange.data.database.CurrencyProvider"
+            android:name=".data.database.CurrencyProvider"
             android:authorities="com.example.currency_db" />
+
+        <activity android:name=".ui.result.ExchangeResultActivity"></activity>
     </application>
 
 </manifest>
