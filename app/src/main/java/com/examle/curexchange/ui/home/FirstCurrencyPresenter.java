@@ -16,7 +16,7 @@ import javax.inject.Inject;
 @InjectViewState
 public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
-    List<String> names;
+    private List<String> names;
 
     @Inject
     CurrencyInteractor currencyInteractor;
