@@ -1,4 +1,4 @@
-package com.examle.curexchange.ui.home;
+package com.examle.curexchange.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +30,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
     public CurrencyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.first_currency_item_view, parent, false);
+                .inflate(R.layout.currency_item_view, parent, false);
 
         return new ViewHolder(view);
     }

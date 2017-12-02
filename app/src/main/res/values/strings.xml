@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CurExChange</string>
     <string name="first_currency_screen">Select first currency</string>
+    <string name="second_currency_screen">Select second currency</string>
 </resources>
