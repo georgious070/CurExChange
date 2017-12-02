@@ -1,10 +1,8 @@
 package com.examle.curexchange.data.repository;
 
-
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
