@@ -37,11 +37,11 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final CurrencyAdapter.ViewHolder holder, int position) {
-        holder.firstCurrencyName.setText(currenciesList.get(position));
+        holder.currencyNameTextView.setText(currenciesList.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClicked();
+                listener.onClicked(holder.currencyNameTextView.getText().toString());
             }
         });
     }
@@ -53,16 +53,16 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
 
     public interface OnRecyclerItemClickedListener {
 
-        void onClicked();
+        void onClicked(String name);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView firstCurrencyName;
+        private TextView currencyNameTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            firstCurrencyName = itemView.findViewById(R.id.first_currency_name);
+            currencyNameTextView = itemView.findViewById(R.id.currency_name);
         }
     }
 }

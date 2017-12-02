@@ -42,7 +42,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     }
 
     @Override
-    public void onClicked() {
+    public void onClicked(String name) {
 
     }
 
