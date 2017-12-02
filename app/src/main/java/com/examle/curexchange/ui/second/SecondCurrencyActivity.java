@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.examle.curexchange.App;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
 import com.examle.curexchange.ui.home.CurrencyAdapter;
@@ -27,7 +25,7 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
 
     public static Intent getIntent(Context context, List<String> names) {
         Intent intent = new Intent(context, SecondCurrencyActivity.class);
-        intent.putStringArrayListExtra(INTENT_KEY, (ArrayList<String>)names);
+        intent.putStringArrayListExtra(INTENT_KEY, (ArrayList<String>) names);
         return intent;
     }
 
@@ -39,6 +37,7 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second_currency);
 
         secondCurrencyRecyclerView = findViewById(R.id.recycler_view_second_currency);
         currencyAdapter = new CurrencyAdapter(new ArrayList<String>(), this);
