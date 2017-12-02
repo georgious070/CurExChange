@@ -14,7 +14,7 @@ import com.examle.curexchange.ui.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFirstCurrencyActivity extends BaseActivity implements FirstCurrencyView,
+public class FirstCurrencyActivity extends BaseActivity implements FirstCurrencyView,
         CurrencyAdapter.OnRecyclerItemClickedListener {
 
     @InjectPresenter
