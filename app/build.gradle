@@ -26,9 +26,28 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    // Support
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+
     //Moxy
     compile 'com.arello-mobile:moxy:1.4.5'
     compile 'com.arello-mobile:moxy-app-compat:1.4.5'
     compile "com.arello-mobile:moxy-android:1.4.5"
     annotationProcessor "com.arello-mobile:moxy-compiler:1.4.5"
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //Dagger2
+    compile "com.google.dagger:dagger:2.12"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.12"
+
+    //Gson
+    compile 'com.google.code.gson:gson:2.8.0'
+
+    //OkHttp
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.squareup.okio:okio:1.13.0'
 }
