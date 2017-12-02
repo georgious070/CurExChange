@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.examle.curexchange.App;
 import com.examle.curexchange.R;
+import com.examle.curexchange.ui.adapter.CurrencyAdapter;
 import com.examle.curexchange.ui.base.BaseActivity;
 import com.examle.curexchange.ui.second.SecondCurrencyActivity;
 

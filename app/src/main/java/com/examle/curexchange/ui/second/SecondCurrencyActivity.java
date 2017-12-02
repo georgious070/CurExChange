@@ -9,7 +9,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.examle.curexchange.R;
 import com.examle.curexchange.ui.base.BaseActivity;
-import com.examle.curexchange.ui.home.CurrencyAdapter;
+import com.examle.curexchange.ui.adapter.CurrencyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.examle.curexchange.ui.home;
+package com.examle.curexchange.ui.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
