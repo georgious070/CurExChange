@@ -35,7 +35,7 @@ public class CurrencyRepository {
         this.apiCryptoCode = apiCryptoCode;
     }
 
-    private void loadDataCurrencyExchange(final WaitForInsertCallback waitForInsertCallback) {
+    private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
         apiCryptoCode.getCryptoCodes().enqueue(new Callback<CryptoCode>() {
             @Override
             public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
@@ -64,7 +64,7 @@ public class CurrencyRepository {
     }
 
     public void getNames(final FirstCurrencyCallback firstCurrencyCallback){
-        loadDataCurrencyExchange(new WaitForInsertCallback() {
+        loadCurrencyCodes(new WaitForInsertCallback() {
             @Override
             public void onSuccess() {
                 queryData(firstCurrencyCallback);

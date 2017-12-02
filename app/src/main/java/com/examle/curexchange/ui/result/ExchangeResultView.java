@@ -7,4 +7,5 @@ import com.examle.curexchange.ui.base.BaseView;
 @StateStrategyType(AddToEndStrategy.class)
 public interface ExchangeResultView extends BaseView{
 
+    void showData(String result);
 }
