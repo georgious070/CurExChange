@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.second.SecondCurrencyActivity" />
-        <activity android:name=".ui.result.ExchangeResultActivity" />
+        <activity android:name=".ui.result.ExchangeResultActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <provider
             android:name=".data.database.CurrencyProvider"
