@@ -24,9 +24,10 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_CURRENCY_TABLE);
         String SQL_CREATE_HISTORY_TABLE = "CREATE TABLE " + HistoryEntry.TABLE_NAME + " ("
                 + HistoryEntry._ID + " INTEGER PRIMARY KEY,"
-                +HistoryEntry.COLUMN_FIRST_CURRENCY + " TEXT,"
+                + HistoryEntry.COLUMN_FIRST_CURRENCY + " TEXT,"
                 + HistoryEntry.COLUMN_SECOND_CURRENCY + " TEXT,"
                 + HistoryEntry.COLUMN_RESULT + " REAL);";
+        db.execSQL(SQL_CREATE_HISTORY_TABLE);
     }
 
     @Override

@@ -2,12 +2,15 @@ package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
+import com.examle.curexchange.data.database.HistoryContract;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
+import com.examle.curexchange.data.database.HistoryContract.HistoryEntry;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -70,6 +73,7 @@ public class ExchangeRepository {
                     JSONObject ticker = jsonObject.getJSONObject("ticker");
                     String multiplier = ticker.getString("price");
                     exchangeCallback.onSuccess(getResult(multiplier));
+                    insertToHistoryTable(getFirstName(), getSecondName(), Float.parseFloat(multiplier));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -80,6 +84,15 @@ public class ExchangeRepository {
 
             }
         });
+    }
+
+    private void insertToHistoryTable(String firstName, String secondName, float result) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(HistoryEntry.COLUMN_FIRST_CURRENCY, firstName);
+        contentValues.put(HistoryEntry.COLUMN_SECOND_CURRENCY, secondName);
+        contentValues.put(HistoryEntry.COLUMN_RESULT, result);
+        MyAsync myAsync = new MyAsync(null, HistoryEntry.TABLE_NAME);
+        myAsync.execute(contentValues);
     }
 
     @SuppressLint("HandlerLeak")
@@ -119,16 +132,17 @@ public class ExchangeRepository {
                 null);
     }
 
-    public int getResult(String multiplier) {
-        int multipl = (int)Float.parseFloat(multiplier);
-        return  getValue()* multipl;
+
+    private int getResult(String multiplier) {
+        int multipl = (int) Float.parseFloat(multiplier);
+        return getValue() * multipl;
     }
 
-    public int getValue() {
+    private int getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         this.value = value;
     }
 

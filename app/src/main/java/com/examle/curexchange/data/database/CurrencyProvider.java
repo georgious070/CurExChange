@@ -17,12 +17,16 @@ public class CurrencyProvider extends ContentProvider {
     private DbHelper dbHelper;
     public SQLiteDatabase sqLiteDatabase;
     private static final int CURRENCY_MATCHER = 100;
+    private static final int HISTORY_MATCHER = 101;
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         uriMatcher.addURI(CurrencyContract.CONTENT_AUTHORITY,
                 CurrencyContract.PATH_CURRENCY,
                 CURRENCY_MATCHER);
+        uriMatcher.addURI(HistoryContract.CONTENT_AUTHORITY,
+                HistoryContract.PATH_HISTORY,
+                HISTORY_MATCHER);
     }
 
     @Override
@@ -63,6 +67,8 @@ public class CurrencyProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case CURRENCY_MATCHER:
                 return CurrencyContract.CurrencyEntry.CONTENT_LIST_TYPE;
+            case HISTORY_MATCHER:
+                return HistoryContract.HistoryEntry.CONTENT_LIST_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match");
         }
@@ -77,6 +83,9 @@ public class CurrencyProvider extends ContentProvider {
             case CURRENCY_MATCHER:
                 rawId = sqLiteDatabase.insert(CurrencyContract.CurrencyEntry.TABLE_NAME, null, values);
                 break;
+            case HISTORY_MATCHER:
+                rawId = sqLiteDatabase.insert(HistoryContract.HistoryEntry.TABLE_NAME, null, values);
+                break;
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -84,8 +93,6 @@ public class CurrencyProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(resultUri, null);
         return resultUri;
     }
-
-
 
     @Override
     public int delete(@NonNull Uri uri,
