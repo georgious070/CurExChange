@@ -10,10 +10,12 @@ public class SecondCurrencyPresenter extends BasePresenter<SecondCurrencyView> {
 
     private List<String> names;
     private String firstName;
+    private int value;
 
-    public SecondCurrencyPresenter(List<String> names, String firstName) {
+    public SecondCurrencyPresenter(List<String> names, String firstName, int value) {
         this.names = names;
         this.firstName = firstName;
+        this.value = value;
     }
 
     @Override
@@ -23,6 +25,6 @@ public class SecondCurrencyPresenter extends BasePresenter<SecondCurrencyView> {
     }
 
     void buttonClicked() {
-        getViewState().handleFloatButton(firstName);
+        getViewState().handleFloatButton(firstName, value);
     }
 }

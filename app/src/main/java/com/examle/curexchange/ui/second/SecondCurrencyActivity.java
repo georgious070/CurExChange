@@ -29,17 +29,19 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     private CurrencyAdapter currencyAdapter;
     private FloatingActionButton floatingActionButton;
 
-    public static Intent getIntent(Context context, List<String> names, String firstName) {
+    public static Intent getIntent(Context context, List<String> names, String firstName, int value) {
         Intent intent = new Intent(context, SecondCurrencyActivity.class);
         intent.putStringArrayListExtra(Constants.INTENT_KEY_NAMES, (ArrayList<String>) names);
         intent.putExtra(Constants.INTENT_KEY_FIRST_NAME, firstName);
+        intent.putExtra(Constants.INTENT_KEY_VALUE, value);
         return intent;
     }
 
     @ProvidePresenter
     SecondCurrencyPresenter providePresenter() {
         return new SecondCurrencyPresenter(getIntent().getStringArrayListExtra(Constants.INTENT_KEY_NAMES),
-                getIntent().getStringExtra(Constants.INTENT_KEY_FIRST_NAME));
+                getIntent().getStringExtra(Constants.INTENT_KEY_FIRST_NAME),
+                getIntent().getIntExtra(Constants.INTENT_KEY_VALUE, 0));
     }
 
     @Override
@@ -66,9 +68,9 @@ public class SecondCurrencyActivity extends BaseActivity implements SecondCurren
     }
 
     @Override
-    public void handleFloatButton(String firstName) {
+    public void handleFloatButton(String firstName, int value) {
         startActivity(ExchangeResultActivity.getIntent(SecondCurrencyActivity.this,
-                firstName, secondName));
+                firstName, secondName, value));
     }
 
     @Override

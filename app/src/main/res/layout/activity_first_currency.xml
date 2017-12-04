@@ -27,12 +27,12 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_text"
         android:layout_width="wrap_content"
         android:layout_height="43dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="phone"
         android:text="@string/edit_text"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -43,8 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="@+id/editText"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toStartOf="@+id/edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text"
         tools:ignore="MissingConstraints" />
 
 

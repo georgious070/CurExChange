@@ -3,13 +3,22 @@ package com.examle.curexchange.data.repository;
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
 import android.database.Cursor;
+import android.net.Uri;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
 import com.examle.curexchange.data.model.cryptonator.Ticker;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,13 +27,14 @@ import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 public class ExchangeRepository {
 
     private static AsyncQueryHandler handler;
-    private String multiplier;
     private String firstCode;
     private String secondCode;
+    private int value;
     private String firstName;
     private String secondName;
     private ApiExchange apiExchange;
@@ -36,27 +46,15 @@ public class ExchangeRepository {
         this.mapOfCodeAndName = new HashMap<>();
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    private void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    private void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
     public void getResult(final ExchangeCallback exchangeCallback,
                           String firstName,
-                          String secondName) {
+                          String secondName,
+                          int value) {
+
         setFirstName(firstName);
         setSecondName(secondName);
+        setValue(value);
+
         queryCodesFromDB(new QueryCodeCallback() {
             @Override
             public void onSuccess(HashMap<String, String> mapOfCodeAndName) {
@@ -67,20 +65,26 @@ public class ExchangeRepository {
 
     public void loadExchangeValue(final ExchangeCallback exchangeCallback,
                                   HashMap<String, String> mapOfCodeAndName) {
-
         firstCode = mapOfCodeAndName.get(getFirstName());
         secondCode = mapOfCodeAndName.get(getSecondName());
-
-        apiExchange.getExchange(firstCode, secondCode).enqueue(new Callback<Ticker>() {
+        String firstLowerCase = firstCode.toLowerCase();
+        String secondLowerCase = secondCode.toLowerCase();
+        apiExchange.getExchange(firstLowerCase, secondLowerCase).enqueue(new Callback<Object>() {
             @Override
-            public void onResponse(Call<Ticker> call, Response<Ticker> response) {
-                multiplier = response.body().getPrice();
+            public void onResponse(Call<Object> call, Response<Object> response) {
 
-                exchangeCallback.onSuccess();
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    JSONObject ticker = jsonObject.getJSONObject("ticker");
+                    String multiplier = ticker.getString("price");
+                    exchangeCallback.onSuccess(getResult(multiplier));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
-            public void onFailure(Call<Ticker> call, Throwable t) {
+            public void onFailure(Call<Object> call, Throwable t) {
 
             }
         });
@@ -88,7 +92,6 @@ public class ExchangeRepository {
 
     @SuppressLint("HandlerLeak")
     private void queryCodesFromDB(final QueryCodeCallback queryCodeCallback) {
-
         String[] projection = {CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME,
                 CurrencyContract.CurrencyEntry.COLUMN_CODE};
         String selection = CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?"
@@ -100,7 +103,6 @@ public class ExchangeRepository {
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
                 super.onQueryComplete(token, cookie, cursor);
-
                 int columnIndexName = cursor
                         .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME);
                 int columnIndexCode = cursor
@@ -123,5 +125,34 @@ public class ExchangeRepository {
                 selection,
                 selectionArgc,
                 null);
+    }
+
+    public int getResult(String multiplier) {
+        int multipl = (int)Float.parseFloat(multiplier);
+        return  getValue()* multipl;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    private String getFirstName() {
+        return firstName;
+    }
+
+    private void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    private String getSecondName() {
+        return secondName;
+    }
+
+    private void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 }

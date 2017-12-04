@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.examle.curexchange.R;
@@ -22,6 +23,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     private RecyclerView firstCurrencyRecyclerView;
     private CurrencyAdapter currencyAdapter;
     private FloatingActionButton firstButton;
+    private EditText editText;
     private String firstName;
 
     @Override
@@ -33,11 +35,12 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
         currencyAdapter = new CurrencyAdapter(new ArrayList<String>(), this);
         firstCurrencyRecyclerView.setAdapter(currencyAdapter);
 
+        editText = findViewById(R.id.edit_text);
         firstButton = findViewById(R.id.first_float_button_next);
         firstButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firstCurrencyPresenter.buttonClicked();
+                firstCurrencyPresenter.buttonClicked(editText);
             }
         });
     }
@@ -53,7 +56,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     }
 
     @Override
-    public void handleFloatButton(List<String> names) {
-        startActivity(SecondCurrencyActivity.getIntent(this, names, firstName));
+    public void handleFloatButton(List<String> names, int value) {
+        startActivity(SecondCurrencyActivity.getIntent(this, names, firstName, value));
     }
 }

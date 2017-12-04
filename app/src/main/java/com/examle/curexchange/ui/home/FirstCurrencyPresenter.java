@@ -2,6 +2,7 @@ package com.examle.curexchange.ui.home;
 
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.widget.EditText;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.examle.curexchange.App;
@@ -47,7 +48,9 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
         currencyInteractor.loadData(firstCurrencyCallback);
     }
 
-    void buttonClicked() {
-        getViewState().handleFloatButton(getNames());
+    public void buttonClicked(EditText editText) {
+        int value = Integer.parseInt(editText.getText().toString());
+        getViewState().handleFloatButton(getNames(), value);
+
     }
 }

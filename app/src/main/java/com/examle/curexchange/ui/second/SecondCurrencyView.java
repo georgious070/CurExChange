@@ -12,5 +12,5 @@ public interface SecondCurrencyView extends BaseView {
 
     void showData(List<String> names);
 
-    void handleFloatButton(String firstName);
+    void handleFloatButton(String firstName, int value);
 }

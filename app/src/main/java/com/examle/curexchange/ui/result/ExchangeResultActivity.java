@@ -18,17 +18,19 @@ public class ExchangeResultActivity extends BaseActivity implements ExchangeResu
     ExchangeResultPresenter exchangeResultPresenter;
     private TextView textView;
 
-    public static Intent getIntent(Context context, String firstName, String secondName) {
+    public static Intent getIntent(Context context, String firstName, String secondName, int value) {
         Intent intent = new Intent(context, ExchangeResultActivity.class);
         intent.putExtra(Constants.INTENT_KEY_FIRST_NAME, firstName);
         intent.putExtra(Constants.INTENT_KEY_SECOND_NAME, secondName);
+        intent.putExtra(Constants.INTENT_KEY_VALUE, value);
         return intent;
     }
 
     @ProvidePresenter
     ExchangeResultPresenter providePresenter() {
         return new ExchangeResultPresenter(getIntent().getStringExtra(Constants.INTENT_KEY_FIRST_NAME),
-                getIntent().getStringExtra(Constants.INTENT_KEY_SECOND_NAME));
+                getIntent().getStringExtra(Constants.INTENT_KEY_SECOND_NAME),
+                getIntent().getIntExtra(Constants.INTENT_KEY_VALUE, 0));
     }
 
     @Override
@@ -41,6 +43,6 @@ public class ExchangeResultActivity extends BaseActivity implements ExchangeResu
 
     @Override
     public void showData(String result) {
-
+        textView.setText(result);
     }
 }

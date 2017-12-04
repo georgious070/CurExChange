@@ -15,7 +15,7 @@ public class ExchangeInteractor {
         this.exchangeRepository = exchangeRepository;
     }
 
-    public void getResult(ExchangeCallback exchangeCallback, String firstName, String secondName){
-        exchangeRepository.getResult(exchangeCallback, firstName, secondName);
+    public void getResult(ExchangeCallback exchangeCallback, String firstName, String secondName, int value){
+        exchangeRepository.getResult(exchangeCallback, firstName, secondName, value);
     }
 }
