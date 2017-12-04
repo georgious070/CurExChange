@@ -6,8 +6,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.examle.curexchange.App;
-import com.examle.curexchange.data.model.crypto_code.CryptoCode;
-import com.examle.curexchange.data.model.crypto_code.Row;
+import com.examle.curexchange.data.model.pojo.CryptoCode;
+import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
 import com.examle.curexchange.ui.home.FirstCurrencyCallback;

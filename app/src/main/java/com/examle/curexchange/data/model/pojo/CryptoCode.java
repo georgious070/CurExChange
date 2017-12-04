@@ -1,4 +1,4 @@
-package com.examle.curexchange.data.model.crypto_code;
+package com.examle.curexchange.data.model.pojo;
 
 import java.util.List;
 

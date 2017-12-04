@@ -1,9 +1,6 @@
 package com.examle.curexchange.data.remote;
 
-import com.examle.curexchange.data.model.crypto_code.CryptoCode;
-import com.examle.curexchange.data.model.crypto_code.Row;
-
-import java.util.List;
+import com.examle.curexchange.data.model.pojo.CryptoCode;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
