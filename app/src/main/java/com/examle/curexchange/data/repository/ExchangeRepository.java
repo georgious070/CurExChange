@@ -3,11 +3,9 @@ package com.examle.curexchange.data.repository;
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
 import android.database.Cursor;
-import android.net.Uri;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
-import com.examle.curexchange.data.model.cryptonator.Ticker;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
 import com.google.gson.Gson;
@@ -15,19 +13,13 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Url;
 
 public class ExchangeRepository {
 

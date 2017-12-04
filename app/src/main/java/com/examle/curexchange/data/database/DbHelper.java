@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
+import com.examle.curexchange.data.database.HistoryContract.HistoryEntry;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -21,6 +22,11 @@ public class DbHelper extends SQLiteOpenHelper {
                 + CurrencyEntry.COLUMN_CODE + " TEXT PRIMARY KEY,"
                 + CurrencyEntry.COLUMN_CRYPTO_NAME + " TEXT);";
         db.execSQL(SQL_CREATE_CURRENCY_TABLE);
+        String SQL_CREATE_HISTORY_TABLE = "CREATE TABLE " + HistoryEntry.TABLE_NAME + " ("
+                + HistoryEntry._ID + " INTEGER PRIMARY KEY,"
+                +HistoryEntry.COLUMN_FIRST_CURRENCY + " TEXT,"
+                + HistoryEntry.COLUMN_SECOND_CURRENCY + " TEXT,"
+                + HistoryEntry.COLUMN_RESULT + " REAL);";
     }
 
     @Override
