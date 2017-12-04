@@ -6,6 +6,7 @@ import android.database.Cursor;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
+import com.examle.curexchange.data.model.cryptonator.Ticker;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
 
@@ -14,11 +15,20 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ExchangeRepository {
 
     private static AsyncQueryHandler handler;
+    private String multiplier;
+    private String firstCode;
+    private String secondCode;
+    private String firstName;
+    private String secondName;
     private ApiExchange apiExchange;
-    private Map<String, String> mapOfCodeAndName;
+    private HashMap<String, String> mapOfCodeAndName;
 
     @Inject
     public ExchangeRepository(ApiExchange apiExchange) {
@@ -26,43 +36,82 @@ public class ExchangeRepository {
         this.mapOfCodeAndName = new HashMap<>();
     }
 
-    void loadExchangeValue(ExchangeCallback exchangeCallback, Map<String, String> mapOfCodeAndName) {
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void getResult(final ExchangeCallback exchangeCallback, String firstName, String secondName) {
+    private void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    private void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public void getResult(final ExchangeCallback exchangeCallback,
+                          String firstName,
+                          String secondName) {
+        setFirstName(firstName);
+        setSecondName(secondName);
         queryCodesFromDB(new QueryCodeCallback() {
             @Override
-            public void onSuccess(Map<String, String> mapOfCodeAndName) {
+            public void onSuccess(HashMap<String, String> mapOfCodeAndName) {
                 loadExchangeValue(exchangeCallback, mapOfCodeAndName);
             }
-        }, firstName, secondName);
+        });
+    }
+
+    public void loadExchangeValue(final ExchangeCallback exchangeCallback,
+                                  HashMap<String, String> mapOfCodeAndName) {
+
+        firstCode = mapOfCodeAndName.get(getFirstName());
+        secondCode = mapOfCodeAndName.get(getSecondName());
+
+        apiExchange.getExchange(firstCode, secondCode).enqueue(new Callback<Ticker>() {
+            @Override
+            public void onResponse(Call<Ticker> call, Response<Ticker> response) {
+                multiplier = response.body().getPrice();
+
+                exchangeCallback.onSuccess();
+            }
+
+            @Override
+            public void onFailure(Call<Ticker> call, Throwable t) {
+
+            }
+        });
     }
 
     @SuppressLint("HandlerLeak")
-    void queryCodesFromDB(final QueryCodeCallback queryCodeCallback, String firstName, String secondName) {
+    private void queryCodesFromDB(final QueryCodeCallback queryCodeCallback) {
 
         String[] projection = {CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME,
                 CurrencyContract.CurrencyEntry.COLUMN_CODE};
         String selection = CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?"
                 + " OR "
                 + CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?";
-        String[] selectionArgc = {firstName, secondName};
+        String[] selectionArgc = {getFirstName(), getSecondName()};
 
         handler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
                 super.onQueryComplete(token, cookie, cursor);
 
-                int columnIndexCode = cursor
-                        .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CODE);
                 int columnIndexName = cursor
                         .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME);
+                int columnIndexCode = cursor
+                        .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CODE);
 
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                    mapOfCodeAndName.put(cursor.getString(columnIndexCode),
-                            cursor.getString(columnIndexName));
+                    mapOfCodeAndName.put(cursor.getString(columnIndexName),
+                            cursor.getString(columnIndexCode));
                 }
+
                 queryCodeCallback.onSuccess(mapOfCodeAndName);
             }
         };

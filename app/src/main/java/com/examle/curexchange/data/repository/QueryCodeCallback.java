@@ -1,9 +1,8 @@
 package com.examle.curexchange.data.repository;
 
-
-import java.util.Map;
+import java.util.HashMap;
 
 public interface QueryCodeCallback {
 
-    void onSuccess(Map<String, String> mapOfCodeAndName);
+    void onSuccess(HashMap<String, String> mapOfCodeAndName);
 }
