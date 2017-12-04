@@ -52,7 +52,7 @@ public class CurrencyRepository {
                     codesContentValues[i]= helpCV;
                 }
 
-                MyAsync myAsync = new MyAsync(waitForInsertCallback);
+                MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
                 myAsync.execute(codesContentValues);
             }
 
