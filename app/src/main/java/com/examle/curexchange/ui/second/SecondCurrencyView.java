@@ -11,4 +11,6 @@ import java.util.List;
 public interface SecondCurrencyView extends BaseView {
 
     void showData(List<String> names);
+
+    void handleFloatButton(String firstName, int value);
 }

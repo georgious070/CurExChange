@@ -6,8 +6,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.examle.curexchange.App;
-import com.examle.curexchange.data.model.crypto_code.CryptoCode;
-import com.examle.curexchange.data.model.crypto_code.Row;
+import com.examle.curexchange.data.model.pojo.CryptoCode;
+import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
 import com.examle.curexchange.ui.home.FirstCurrencyCallback;
@@ -35,7 +35,7 @@ public class CurrencyRepository {
         this.apiCryptoCode = apiCryptoCode;
     }
 
-    private void loadDataCurrencyExchange(final WaitForInsertCallback waitForInsertCallback) {
+    private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
         apiCryptoCode.getCryptoCodes().enqueue(new Callback<CryptoCode>() {
             @Override
             public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
@@ -64,7 +64,7 @@ public class CurrencyRepository {
     }
 
     public void getNames(final FirstCurrencyCallback firstCurrencyCallback){
-        loadDataCurrencyExchange(new WaitForInsertCallback() {
+        loadCurrencyCodes(new WaitForInsertCallback() {
             @Override
             public void onSuccess() {
                 queryData(firstCurrencyCallback);
