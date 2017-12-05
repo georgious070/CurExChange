@@ -7,7 +7,6 @@ import android.database.Cursor;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.CurrencyContract;
-import com.examle.curexchange.data.database.HistoryContract;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
 import com.examle.curexchange.data.database.HistoryContract.HistoryEntry;
@@ -45,11 +44,9 @@ public class ExchangeRepository {
                           String firstName,
                           String secondName,
                           int value) {
-
         setFirstName(firstName);
         setSecondName(secondName);
         setValue(value);
-
         queryCodesFromDB(new QueryCodeCallback() {
             @Override
             public void onSuccess(HashMap<String, String> mapOfCodeAndName) {
@@ -67,7 +64,6 @@ public class ExchangeRepository {
         apiExchange.getExchange(firstLowerCase, secondLowerCase).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     JSONObject ticker = jsonObject.getJSONObject("ticker");
@@ -103,7 +99,6 @@ public class ExchangeRepository {
                 + " OR "
                 + CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?";
         String[] selectionArgc = {getFirstName(), getSecondName()};
-
         handler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
@@ -112,17 +107,14 @@ public class ExchangeRepository {
                         .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME);
                 int columnIndexCode = cursor
                         .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CODE);
-
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
                     mapOfCodeAndName.put(cursor.getString(columnIndexName),
                             cursor.getString(columnIndexCode));
                 }
-
                 queryCodeCallback.onSuccess(mapOfCodeAndName);
             }
         };
-
         handler.startQuery(1,
                 null,
                 CurrencyContract.CurrencyEntry.CONTENT_URI,

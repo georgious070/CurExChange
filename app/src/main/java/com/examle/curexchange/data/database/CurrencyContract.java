@@ -10,7 +10,6 @@ public class CurrencyContract {
     public static final String PATH_CURRENCY = "currency";
 
     public static class CurrencyEntry {
-
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_CURRENCY);
         public static final String TABLE_NAME = "crypto_codes";
         public static final String COLUMN_CODE = "code";

@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.DbHelper;
@@ -48,9 +47,7 @@ public class CurrencyRepository {
             @Override
             public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
                 rows.addAll(response.body().getRows());
-
                 ContentValues[] codesContentValues = new ContentValues[rows.size()];
-
                 ContentValues contentValues = new ContentValues();
                 ContentValues helpCV;
                 for (int i = 0; i < rows.size(); i++) {
@@ -59,7 +56,6 @@ public class CurrencyRepository {
                     helpCV = new ContentValues(contentValues);
                     codesContentValues[i] = helpCV;
                 }
-
                 MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
                 myAsync.execute(codesContentValues);
             }
@@ -87,7 +83,6 @@ public class CurrencyRepository {
     @SuppressLint("HandlerLeak")
     private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
         String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
-
         myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {

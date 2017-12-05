@@ -1,7 +1,6 @@
 package com.examle.curexchange.data.repository;
 
 import android.content.ContentValues;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.examle.curexchange.App;
