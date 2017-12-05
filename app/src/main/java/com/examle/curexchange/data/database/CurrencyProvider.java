@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.examle.curexchange.App;
-
 public class CurrencyProvider extends ContentProvider {
 
     private DbHelper dbHelper;

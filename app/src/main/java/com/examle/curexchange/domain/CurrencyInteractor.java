@@ -14,7 +14,7 @@ public class CurrencyInteractor {
         this.currencyRepository = currencyRepository;
     }
 
-    public void loadData(FirstCurrencyCallback firstCurrencyCallback){
+    public void loadData(FirstCurrencyCallback firstCurrencyCallback) {
         currencyRepository.getNames(firstCurrencyCallback);
     }
 }

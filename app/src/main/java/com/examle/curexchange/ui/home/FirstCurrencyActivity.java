@@ -59,4 +59,9 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
     public void handleFloatButton(List<String> names, int value) {
         startActivity(SecondCurrencyActivity.getIntent(this, names, firstName, value));
     }
+
+    @Override
+    public void showProgress(boolean inProgress) {
+        super.showProgress(inProgress);
+    }
 }
