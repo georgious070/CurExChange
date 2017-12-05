@@ -12,4 +12,7 @@ public interface FirstCurrencyView extends BaseView {
     void showData(List<String> name);
 
     void handleFloatButton(List<String> names, int value);
+
+    @Override
+    void showProgress(boolean isShow);
 }

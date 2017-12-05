@@ -24,6 +24,8 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
         public void onSuccess(final List<String> names) {
             getViewState().showData(names);
             setNames(names);
+            loadProgress(false);
+
         }
     };
 
@@ -43,11 +45,17 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
+        loadProgress(true);
         currencyInteractor.loadData(firstCurrencyCallback);
     }
 
     public void buttonClicked(EditText editText) {
         int value = Integer.parseInt(editText.getText().toString());
         getViewState().handleFloatButton(getNames(), value);
+    }
+
+    @Override
+    public void loadProgress(boolean isProgress) {
+        super.loadProgress(isProgress);
     }
 }

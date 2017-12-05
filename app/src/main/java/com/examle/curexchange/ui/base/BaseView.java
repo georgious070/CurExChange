@@ -5,4 +5,6 @@ import com.arellomobile.mvp.MvpView;
 public interface BaseView extends MvpView {
 
     void showToast(String error);
+
+    void showProgress(boolean isShow);
 }
