@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.examle.curexchange.App;
+import com.examle.curexchange.data.database.DbHelper;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
@@ -27,12 +31,16 @@ public class CurrencyRepository {
     private final List<Row> rows;
     private ApiCryptoCode apiCryptoCode;
     private AsyncQueryHandler myHandler;
+    private SQLiteDatabase sqLiteDatabase;
+    private DbHelper dbHelper;
 
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode) {
         this.names = new ArrayList<>();
         this.rows = new ArrayList<>();
         this.apiCryptoCode = apiCryptoCode;
+        this.dbHelper = new DbHelper(App.getApp());
+        this.sqLiteDatabase = dbHelper.getWritableDatabase();
     }
 
     private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
@@ -49,7 +57,7 @@ public class CurrencyRepository {
                     contentValues.put(CurrencyEntry.COLUMN_CODE, rows.get(i).getCode());
                     contentValues.put(CurrencyEntry.COLUMN_CRYPTO_NAME, rows.get(i).getName());
                     helpCV = new ContentValues(contentValues);
-                    codesContentValues[i]= helpCV;
+                    codesContentValues[i] = helpCV;
                 }
 
                 MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
@@ -63,13 +71,17 @@ public class CurrencyRepository {
         });
     }
 
-    public void getNames(final FirstCurrencyCallback firstCurrencyCallback){
-        loadCurrencyCodes(new WaitForInsertCallback() {
-            @Override
-            public void onSuccess() {
-                queryData(firstCurrencyCallback);
-            }
-        });
+    public void getNames(final FirstCurrencyCallback firstCurrencyCallback) {
+        if (isDbEmpty(sqLiteDatabase, CurrencyEntry.TABLE_NAME)) {
+            loadCurrencyCodes(new WaitForInsertCallback() {
+                @Override
+                public void onSuccess() {
+                    queryData(firstCurrencyCallback);
+                }
+            });
+        } else {
+            queryData(firstCurrencyCallback);
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -82,7 +94,7 @@ public class CurrencyRepository {
                 super.onQueryComplete(token, cookie, cursor);
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                   names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
+                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
                 }
                 cursor.close();
                 firstCurrencyCallback.onSuccess(names);
@@ -93,5 +105,20 @@ public class CurrencyRepository {
                 null,
                 null,
                 null);
+    }
+
+    private boolean isDbEmpty(SQLiteDatabase db, String tableName) {
+        try {
+            Cursor c = db.rawQuery("SELECT * FROM " + tableName + " LIMIT 1", null);
+            if (c.moveToFirst()) {
+                c.close();
+                return false;
+            } else {
+                c.close();
+                return true;
+            }
+        } catch (SQLiteException e) {
+            return true;
+        }
     }
 }

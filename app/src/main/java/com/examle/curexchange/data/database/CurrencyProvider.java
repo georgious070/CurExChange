@@ -110,4 +110,6 @@ public class CurrencyProvider extends ContentProvider {
         //no-op
         return 0;
     }
+
+    public void ifConatin(){};
 }
