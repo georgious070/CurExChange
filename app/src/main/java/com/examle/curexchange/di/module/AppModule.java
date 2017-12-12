@@ -39,6 +39,7 @@ public class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(Constants.CRYPTO_CODE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
