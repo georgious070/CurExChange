@@ -6,12 +6,14 @@ import com.examle.curexchange.App;
 import com.examle.curexchange.Constants;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.remote.ApiExchange;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -53,6 +55,7 @@ public class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(Constants.EXCHANGE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
