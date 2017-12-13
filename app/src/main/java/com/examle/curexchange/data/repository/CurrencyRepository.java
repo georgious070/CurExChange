@@ -1,6 +1,7 @@
 package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -17,9 +18,15 @@ import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import io.reactivex.Observable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,28 +50,41 @@ public class CurrencyRepository {
     }
 
     private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
-        apiCryptoCode.getCryptoCodes().enqueue(new Callback<CryptoCode>() {
-            @Override
-            public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
-                rows.addAll(response.body().getRows());
-                ContentValues[] codesContentValues = new ContentValues[rows.size()];
-                ContentValues contentValues = new ContentValues();
-                ContentValues helpCV;
-                for (int i = 0; i < rows.size(); i++) {
-                    contentValues.put(CurrencyEntry.COLUMN_CODE, rows.get(i).getCode());
-                    contentValues.put(CurrencyEntry.COLUMN_CRYPTO_NAME, rows.get(i).getName());
-                    helpCV = new ContentValues(contentValues);
-                    codesContentValues[i] = helpCV;
-                }
-                MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
-                myAsync.execute(codesContentValues);
-            }
+        Observable<CryptoCode> observable = apiCryptoCode.getCryptoCodes();
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CryptoCode>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            @Override
-            public void onFailure(Call<CryptoCode> call, Throwable t) {
+                    }
 
-            }
-        });
+                    @Override
+                    public void onNext(CryptoCode value) {
+                        rows.addAll(value.getRows());
+                        ContentValues[] codesContentValues = new ContentValues[rows.size()];
+                        ContentValues contentValues = new ContentValues();
+                        ContentValues helpCV;
+                        for (int i = 0; i < rows.size(); i++) {
+                            contentValues.put(CurrencyEntry.COLUMN_CODE, rows.get(i).getCode());
+                            contentValues.put(CurrencyEntry.COLUMN_CRYPTO_NAME, rows.get(i).getName());
+                            helpCV = new ContentValues(contentValues);
+                            codesContentValues[i] = helpCV;
+                        }
+                        MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
+                        myAsync.execute(codesContentValues);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public void getNames(final FirstCurrencyCallback firstCurrencyCallback) {
