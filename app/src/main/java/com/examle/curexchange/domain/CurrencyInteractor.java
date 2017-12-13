@@ -3,7 +3,11 @@ package com.examle.curexchange.domain;
 import com.examle.curexchange.data.repository.CurrencyRepository;
 import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
+import java.util.List;
+
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 public class CurrencyInteractor {
 
@@ -14,7 +18,8 @@ public class CurrencyInteractor {
         this.currencyRepository = currencyRepository;
     }
 
-    public void loadData(FirstCurrencyCallback firstCurrencyCallback) {
-        currencyRepository.getNames(firstCurrencyCallback);
+    public Observable<List<String>> loadData() {
+
+        return new currencyRepository.getNames();
     }
 }

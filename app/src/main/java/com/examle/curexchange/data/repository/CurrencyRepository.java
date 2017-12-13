@@ -71,8 +71,9 @@ public class CurrencyRepository {
                             helpCV = new ContentValues(contentValues);
                             codesContentValues[i] = helpCV;
                         }
-                        MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
-                        myAsync.execute(codesContentValues);
+                        App.getApp().getContentResolver().bulkInsert(CurrencyEntry.CONTENT_URI, codesContentValues);
+//                        MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
+//                        myAsync.execute(codesContentValues);
                     }
 
                     @Override
