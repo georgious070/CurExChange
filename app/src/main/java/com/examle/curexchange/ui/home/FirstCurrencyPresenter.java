@@ -14,6 +14,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
+
 @InjectViewState
 public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
@@ -21,7 +25,7 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
     @Inject
     CurrencyInteractor currencyInteractor;
-    private Subscription subscription;
+    public ArrayCompositeSubscription subscription;
 
     public FirstCurrencyPresenter() {
         names = new ArrayList<>();
@@ -40,7 +44,28 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         loadProgress(true);
-        //subscription = currencyInteractor.loadData();
+
+        currencyInteractor.loadData().subscribe(new Observer<List<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<String> value) {
+                getViewState().showData(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     public void buttonClicked(EditText editText) {

@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.drm.DrmStore;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.DbHelper;
@@ -14,22 +15,18 @@ import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
-import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.Observable;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CurrencyRepository {
 
@@ -49,19 +46,13 @@ public class CurrencyRepository {
         this.sqLiteDatabase = dbHelper.getWritableDatabase();
     }
 
-    private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
-        Observable<CryptoCode> observable = apiCryptoCode.getCryptoCodes();
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CryptoCode>() {
+    private Observable<CryptoCode> loadCurrencyCodes() {
+        return apiCryptoCode.getCryptoCodes()
+                .subscribeOn(Schedulers.io())
+                .doOnNext(new Consumer<CryptoCode>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(CryptoCode value) {
-                        rows.addAll(value.getRows());
+                    public void accept(CryptoCode cryptoCode) throws Exception {
+                        rows.addAll(cryptoCode.getRows());
                         ContentValues[] codesContentValues = new ContentValues[rows.size()];
                         ContentValues contentValues = new ContentValues();
                         ContentValues helpCV;
@@ -72,55 +63,45 @@ public class CurrencyRepository {
                             codesContentValues[i] = helpCV;
                         }
                         App.getApp().getContentResolver().bulkInsert(CurrencyEntry.CONTENT_URI, codesContentValues);
-//                        MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
-//                        myAsync.execute(codesContentValues);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
     }
 
-    public void getNames(final FirstCurrencyCallback firstCurrencyCallback) {
+    public Observable<List<String>> getNames() {
         if (isDbEmpty(sqLiteDatabase, CurrencyEntry.TABLE_NAME)) {
-            loadCurrencyCodes(new WaitForInsertCallback() {
-                @Override
-                public void onSuccess() {
-                    queryData(firstCurrencyCallback);
-                }
-            });
+            loadCurrencyCodes().observeOn(AndroidSchedulers.mainThread()).subscribe();
+            return queryData().observeOn(AndroidSchedulers.mainThread());
+
         } else {
-            queryData(firstCurrencyCallback);
+            return queryData().observeOn(AndroidSchedulers.mainThread());
         }
     }
 
     @SuppressLint("HandlerLeak")
-    private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
-        String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
-        myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
-            @Override
-            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                super.onQueryComplete(token, cookie, cursor);
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    cursor.moveToNext();
-                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
-                }
-                cursor.close();
-                firstCurrencyCallback.onSuccess(names);
-            }
-        };
-        myHandler.startQuery(0, null, CurrencyEntry.CONTENT_URI,
-                projectionCurrency,
-                null,
-                null,
-                null);
+    private Observable<List<String>> queryData() {
+
+        final String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
+        Observable<List<String>> observable = Observable.fromArray();
+        observable
+                .doOnNext(new Consumer<List<String>>() {
+                    @Override
+                    public void accept(List<String> strings) throws Exception {
+                        Cursor cursor = App.getApp().getContentResolver().query(CurrencyEntry.CONTENT_URI,
+                                projectionCurrency,
+                                null,
+                                null,
+                                null);
+
+                        for (int i = 0; i < cursor.getCount(); i++) {
+                            cursor.moveToNext();
+                            names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
+                        }
+                        cursor.close();
+
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+        return observable;
     }
 
     private boolean isDbEmpty(SQLiteDatabase db, String tableName) {
