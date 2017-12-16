@@ -8,6 +8,12 @@ import android.provider.BaseColumns;
 @Entity(tableName = HistoryEntity.HistoryEntry.TABLE_NAME)
 public class HistoryEntity {
 
+    public HistoryEntity(String firstCurrencyName, String secondCurrencyName, long result) {
+        this.firstCurrencyName = firstCurrencyName;
+        this.secondCurrencyName = secondCurrencyName;
+        this.result = result;
+    }
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = BaseColumns._ID)
     private int id;

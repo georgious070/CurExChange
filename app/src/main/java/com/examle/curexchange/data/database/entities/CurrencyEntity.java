@@ -7,6 +7,11 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = CurrencyEntity.CurrencyEntry.TABLE_NAME)
 public class CurrencyEntity {
 
+    public CurrencyEntity(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
     @PrimaryKey
     @ColumnInfo(name = CurrencyEntry.COLUMN_CODE)
     private String code;
