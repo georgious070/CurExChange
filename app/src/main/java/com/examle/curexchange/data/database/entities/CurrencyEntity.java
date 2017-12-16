@@ -30,9 +30,9 @@ public class CurrencyEntity {
         this.name = name;
     }
 
-    static class CurrencyEntry {
-        static final String TABLE_NAME = "crypto_codes";
-        static final String COLUMN_CODE = "code";
-        static final String COLUMN_CRYPTO_NAME = "name";
+    public static class CurrencyEntry {
+        public static final String TABLE_NAME = "crypto_codes";
+        public static final String COLUMN_CODE = "code";
+        public static final String COLUMN_CRYPTO_NAME = "name";
     }
 }
