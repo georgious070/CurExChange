@@ -22,4 +22,9 @@ public interface CurrencyDao {
 
     @Query("SELECT " + CurrencyEntry.COLUMN_CRYPTO_NAME + " FROM " + CurrencyEntry.TABLE_NAME)
     Cursor queryCryptoNames();
+
+    @Query("SELECT " + CurrencyEntry.COLUMN_CODE + " FROM " + CurrencyEntry.TABLE_NAME + " WHERE "
+            + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:firstCryptoName" + " OR "
+            + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:secondCryptoName")
+    Cursor queryCryptoCodesByCryptoNames(String firstCryptoName, String secondCryptoName);
 }
