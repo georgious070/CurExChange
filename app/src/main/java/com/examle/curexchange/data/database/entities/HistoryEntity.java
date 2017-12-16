@@ -1,15 +1,24 @@
 package com.examle.curexchange.data.database.entities;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.provider.BaseColumns;
 
-@Entity
+@Entity(tableName = "history")
 public class HistoryEntity {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = BaseColumns._ID)
     private int id;
+
+    @ColumnInfo(name = "first")
     private String firstCurrencyName;
+
+    @ColumnInfo(name = "second")
     private String secondCurrencyName;
+
+    @ColumnInfo(name = "result")
     private long result;
 
     public int getId() {
