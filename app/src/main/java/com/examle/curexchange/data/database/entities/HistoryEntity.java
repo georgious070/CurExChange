@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 @Entity(tableName = HistoryEntity.HistoryEntry.TABLE_NAME)
 public class HistoryEntity {
 
-    public HistoryEntity(String firstCurrencyName, String secondCurrencyName, long result) {
+    public HistoryEntity(String firstCurrencyName, String secondCurrencyName, float result) {
         this.firstCurrencyName = firstCurrencyName;
         this.secondCurrencyName = secondCurrencyName;
         this.result = result;
@@ -25,7 +25,7 @@ public class HistoryEntity {
     private String secondCurrencyName;
 
     @ColumnInfo(name = HistoryEntry.COLUMN_RESULT)
-    private long result;
+    private float result;
 
     public int getId() {
         return id;
@@ -51,11 +51,11 @@ public class HistoryEntity {
         this.secondCurrencyName = secondCurrencyName;
     }
 
-    public long getResult() {
+    public float getResult() {
         return result;
     }
 
-    public void setResult(long result) {
+    public void setResult(float result) {
         this.result = result;
     }
 

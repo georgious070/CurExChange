@@ -2,13 +2,15 @@ package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
-import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.AsyncTask;
 
-import com.examle.curexchange.App;
+import com.examle.curexchange.data.database.DAOs.CurrencyDao;
+import com.examle.curexchange.data.database.DAOs.HistoryDao;
+import com.examle.curexchange.data.database.entities.CurrencyEntity;
+import com.examle.curexchange.data.database.entities.HistoryEntity;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
-import com.examle.curexchange.data.database.HistoryContract.HistoryEntry;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -32,11 +34,15 @@ public class ExchangeRepository {
     private String secondName;
     private ApiExchange apiExchange;
     private HashMap<String, String> mapOfCodeAndName;
+    private HistoryDao historyDao;
+    private CurrencyDao currencyDao;
 
     @Inject
-    public ExchangeRepository(ApiExchange apiExchange) {
+    public ExchangeRepository(ApiExchange apiExchange, HistoryDao historyDao, CurrencyDao currencyDao) {
         this.apiExchange = apiExchange;
         this.mapOfCodeAndName = new HashMap<>();
+        this.historyDao = historyDao;
+        this.currencyDao = currencyDao;
     }
 
     public void getResult(final ExchangeCallback exchangeCallback,
@@ -81,48 +87,44 @@ public class ExchangeRepository {
         });
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void insertToHistoryTable(String firstName, String secondName, float result) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(HistoryEntry.COLUMN_FIRST_CURRENCY, firstName);
-        contentValues.put(HistoryEntry.COLUMN_SECOND_CURRENCY, secondName);
-        contentValues.put(HistoryEntry.COLUMN_RESULT, result);
-        CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(null, HistoryEntry.TABLE_NAME);
-        currencyAsyncTask.execute(contentValues);
+        HistoryEntity historyEntity = new HistoryEntity(firstName, secondName, result);
+        new AsyncTask<HistoryEntity, Void, Void>() {
+            @Override
+            protected Void doInBackground(HistoryEntity... historyEntities) {
+                historyDao.insertOneRaw(historyEntities[0]);
+                return null;
+            }
+        }.execute(historyEntity);
     }
 
-    @SuppressLint("HandlerLeak")
+    @SuppressLint({"HandlerLeak", "StaticFieldLeak"})
     private void queryCodesFromDB(final QueryCodeCallback queryCodeCallback) {
-        String[] projection = {CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME,
-                CurrencyContract.CurrencyEntry.COLUMN_CODE};
-        String selection = CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?"
-                + " OR "
-                + CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME + " =?";
-        String[] selectionArgc = {getFirstName(), getSecondName()};
-        handler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
+
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                super.onQueryComplete(token, cookie, cursor);
+            protected Void doInBackground(Void... voids) {
+                Cursor cursor = currencyDao.queryCryptoCodesByCryptoNames(getFirstName(), getSecondName());
                 int columnIndexName = cursor
-                        .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CRYPTO_NAME);
+                        .getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CRYPTO_NAME);
                 int columnIndexCode = cursor
-                        .getColumnIndex(CurrencyContract.CurrencyEntry.COLUMN_CODE);
+                        .getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CODE);
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
                     mapOfCodeAndName.put(cursor.getString(columnIndexName),
                             cursor.getString(columnIndexCode));
                 }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
                 queryCodeCallback.onSuccess(mapOfCodeAndName);
             }
-        };
-        handler.startQuery(1,
-                null,
-                CurrencyContract.CurrencyEntry.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgc,
-                null);
+        }.execute();
     }
-
 
     private int getResult(String multiplier) {
         int multipl = (int) Float.parseFloat(multiplier);

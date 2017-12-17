@@ -2,19 +2,15 @@ package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
-import android.content.AsyncTaskLoader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 
-import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.DAOs.CurrencyDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
-import com.examle.curexchange.data.database.CurrencyContract.CurrencyEntry;
 import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import java.util.ArrayList;
@@ -84,7 +80,7 @@ public class CurrencyRepository {
                 Cursor cursor = currencyDao.queryCryptoNames();
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntity.class.getName())));
+                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CRYPTO_NAME)));
                 }
                 return null;
             }
