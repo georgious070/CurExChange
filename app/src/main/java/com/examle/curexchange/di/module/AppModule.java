@@ -6,8 +6,8 @@ import android.content.Context;
 import com.examle.curexchange.App;
 import com.examle.curexchange.Constants;
 import com.examle.curexchange.data.database.AppDatabase;
-import com.examle.curexchange.data.database.DAOs.CurrencyDao;
-import com.examle.curexchange.data.database.DAOs.HistoryDao;
+import com.examle.curexchange.data.database.dao.CurrencyDao;
+import com.examle.curexchange.data.database.dao.HistoryDao;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
 import com.examle.curexchange.data.remote.ApiExchange;
 
@@ -36,7 +36,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    App provideApp(){
+    App provideApp() {
         return App.getApp();
     }
 

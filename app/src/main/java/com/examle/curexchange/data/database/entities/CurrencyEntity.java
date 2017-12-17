@@ -3,8 +3,7 @@ package com.examle.curexchange.data.database.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-
-import io.reactivex.annotations.NonNull;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = CurrencyEntity.CurrencyEntry.TABLE_NAME)
 public class CurrencyEntity {
@@ -15,7 +14,7 @@ public class CurrencyEntity {
     }
 
     @PrimaryKey
-    @android.support.annotation.NonNull
+    @NonNull
     @ColumnInfo(name = CurrencyEntry.COLUMN_CODE)
     private String code;
 

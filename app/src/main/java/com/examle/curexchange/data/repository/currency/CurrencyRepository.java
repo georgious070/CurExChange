@@ -1,4 +1,4 @@
-package com.examle.curexchange.data.repository;
+package com.examle.curexchange.data.repository.currency;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 
-import com.examle.curexchange.data.database.DAOs.CurrencyDao;
+import com.examle.curexchange.data.database.dao.CurrencyDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
@@ -27,8 +27,7 @@ public class CurrencyRepository {
     private List<String> names;
     private final List<Row> rows;
     private ApiCryptoCode apiCryptoCode;
-    private AsyncQueryHandler myHandler;
-    List<CurrencyEntity> currencyEntities;
+    private List<CurrencyEntity> currencyEntities;
     private CurrencyDao currencyDao;
 
     @Inject
@@ -49,7 +48,6 @@ public class CurrencyRepository {
                     currencyEntities.add(new CurrencyEntity(rows.get(i).getCode(), rows.get(i).getName()));
                 }
                 CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback, currencyDao);
-                CurrencyEntity[] array = new CurrencyEntity[currencyEntities.size()];
                 currencyAsyncTask.execute(currencyEntities.toArray(new CurrencyEntity[currencyEntities.size()]));
             }
 

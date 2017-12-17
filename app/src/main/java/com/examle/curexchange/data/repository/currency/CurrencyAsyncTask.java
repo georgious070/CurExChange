@@ -1,16 +1,11 @@
-package com.examle.curexchange.data.repository;
+package com.examle.curexchange.data.repository.currency;
 
-import android.arch.persistence.room.Insert;
 import android.os.AsyncTask;
 
-import com.examle.curexchange.data.database.DAOs.CurrencyDao;
+import com.examle.curexchange.data.database.dao.CurrencyDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 
 import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-
 
 public class CurrencyAsyncTask extends AsyncTask<CurrencyEntity, Void, Void> {
 

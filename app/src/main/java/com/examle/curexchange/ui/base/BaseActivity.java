@@ -1,7 +1,6 @@
 package com.examle.curexchange.ui.base;
 
 import android.app.ProgressDialog;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;

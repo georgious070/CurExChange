@@ -1,11 +1,11 @@
-package com.examle.curexchange.data.repository;
+package com.examle.curexchange.data.repository.exchange;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
-import com.examle.curexchange.data.database.DAOs.CurrencyDao;
-import com.examle.curexchange.data.database.DAOs.HistoryDao;
+import com.examle.curexchange.data.database.dao.CurrencyDao;
+import com.examle.curexchange.data.database.dao.HistoryDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.database.entities.HistoryEntity;
 import com.examle.curexchange.data.remote.ApiExchange;
@@ -97,9 +97,8 @@ public class ExchangeRepository {
         }.execute(historyEntity);
     }
 
-    @SuppressLint({"HandlerLeak", "StaticFieldLeak"})
+    @SuppressLint("StaticFieldLeak")
     private void queryCodesFromDB(final QueryCodeCallback queryCodeCallback) {
-
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {

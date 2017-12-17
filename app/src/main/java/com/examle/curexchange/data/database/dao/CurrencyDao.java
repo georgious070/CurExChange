@@ -1,4 +1,4 @@
-package com.examle.curexchange.data.database.DAOs;
+package com.examle.curexchange.data.database.dao;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

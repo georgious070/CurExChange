@@ -1,6 +1,6 @@
 package com.examle.curexchange.domain;
 
-import com.examle.curexchange.data.repository.ExchangeRepository;
+import com.examle.curexchange.data.repository.exchange.ExchangeRepository;
 import com.examle.curexchange.ui.result.ExchangeCallback;
 
 import javax.inject.Inject;
