@@ -22,10 +22,6 @@
         <activity android:name=".ui.second.SecondCurrencyActivity" />
         <activity android:name=".ui.result.ExchangeResultActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
-
-        <provider
-            android:name=".data.database.CurrencyProvider"
-            android:authorities="com.example.currency_db" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.examle.curexchange.data.repository;
+package com.examle.curexchange.data.repository.exchange;
 
 import java.util.HashMap;
 
