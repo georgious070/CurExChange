@@ -36,6 +36,12 @@ public class AppModule {
 
     @Provides
     @Singleton
+    App provideApp(){
+        return App.getApp();
+    }
+
+    @Provides
+    @Singleton
     @Named("codes")
     Retrofit provideRetrofitCryptoCode() {
         return new Retrofit.Builder()
@@ -71,6 +77,7 @@ public class AppModule {
     AppDatabase provideAppDatabase(App app) {
         return Room
                 .databaseBuilder(app, AppDatabase.class, Constants.DATABASE_NAME)
+                .allowMainThreadQueries()
                 .build();
     }
 

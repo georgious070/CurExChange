@@ -1,7 +1,6 @@
 package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
-import android.content.AsyncQueryHandler;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
@@ -26,7 +25,6 @@ import retrofit2.Response;
 
 public class ExchangeRepository {
 
-    private static AsyncQueryHandler handler;
     private String firstCode;
     private String secondCode;
     private int value;

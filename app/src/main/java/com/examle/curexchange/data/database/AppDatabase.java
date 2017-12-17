@@ -9,7 +9,7 @@ import com.examle.curexchange.data.database.DAOs.HistoryDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.database.entities.HistoryEntity;
 
-@Database(entities = {CurrencyEntity.class, HistoryEntity.class}, version = 1)
+@Database(entities = {CurrencyEntity.class, HistoryEntity.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CurrencyDao currencyDao();

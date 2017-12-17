@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
 
+import io.reactivex.annotations.NonNull;
+
 @Entity(tableName = HistoryEntity.HistoryEntry.TABLE_NAME)
 public class HistoryEntity {
 
@@ -15,6 +17,7 @@ public class HistoryEntity {
     }
 
     @PrimaryKey(autoGenerate = true)
+    @android.support.annotation.NonNull
     @ColumnInfo(name = BaseColumns._ID)
     private int id;
 

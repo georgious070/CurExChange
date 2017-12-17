@@ -48,8 +48,9 @@ public class CurrencyRepository {
                 for (int i = 0; i < rows.size(); i++) {
                     currencyEntities.add(new CurrencyEntity(rows.get(i).getCode(), rows.get(i).getName()));
                 }
-                CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback);
-                currencyAsyncTask.execute((CurrencyEntity[]) currencyEntities.toArray());
+                CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback, currencyDao);
+                CurrencyEntity[] array = new CurrencyEntity[currencyEntities.size()];
+                currencyAsyncTask.execute(currencyEntities.toArray(new CurrencyEntity[currencyEntities.size()]));
             }
 
             @Override
