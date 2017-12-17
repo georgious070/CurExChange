@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.examle.curexchange.App;
-import com.examle.curexchange.data.database.CurrencyContract;
 import com.examle.curexchange.data.remote.ApiExchange;
 import com.examle.curexchange.ui.result.ExchangeCallback;
 import com.examle.curexchange.data.database.HistoryContract.HistoryEntry;

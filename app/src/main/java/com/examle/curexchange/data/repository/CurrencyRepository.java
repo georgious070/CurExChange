@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.examle.curexchange.App;
-import com.examle.curexchange.data.database.DbHelper;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;

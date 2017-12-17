@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.os.AsyncTask;
 
 import com.examle.curexchange.App;
-import com.examle.curexchange.data.database.CurrencyContract;
-import com.examle.curexchange.data.database.HistoryContract;
 
 public class MyAsync extends AsyncTask<ContentValues, Void, Void> {
 
