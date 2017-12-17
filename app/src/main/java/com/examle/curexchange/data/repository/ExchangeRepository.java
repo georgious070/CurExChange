@@ -86,8 +86,8 @@ public class ExchangeRepository {
         contentValues.put(HistoryEntry.COLUMN_FIRST_CURRENCY, firstName);
         contentValues.put(HistoryEntry.COLUMN_SECOND_CURRENCY, secondName);
         contentValues.put(HistoryEntry.COLUMN_RESULT, result);
-        MyAsync myAsync = new MyAsync(null, HistoryEntry.TABLE_NAME);
-        myAsync.execute(contentValues);
+        CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(null, HistoryEntry.TABLE_NAME);
+        currencyAsyncTask.execute(contentValues);
     }
 
     @SuppressLint("HandlerLeak")

@@ -2,12 +2,13 @@ package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.examle.curexchange.App;
+import com.examle.curexchange.data.database.DAOs.CurrencyDao;
+import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
@@ -29,16 +30,16 @@ public class CurrencyRepository {
     private final List<Row> rows;
     private ApiCryptoCode apiCryptoCode;
     private AsyncQueryHandler myHandler;
-    private SQLiteDatabase sqLiteDatabase;
-    private DbHelper dbHelper;
+    List<CurrencyEntity> currencyEntities;
+    private CurrencyDao currencyDao;
 
     @Inject
-    public CurrencyRepository(ApiCryptoCode apiCryptoCode) {
+    public CurrencyRepository(ApiCryptoCode apiCryptoCode, CurrencyDao currencyDao) {
+        this.currencyEntities = new ArrayList<>();
         this.names = new ArrayList<>();
         this.rows = new ArrayList<>();
         this.apiCryptoCode = apiCryptoCode;
-        this.dbHelper = new DbHelper(App.getApp());
-        this.sqLiteDatabase = dbHelper.getWritableDatabase();
+        this.currencyDao = currencyDao;
     }
 
     private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
@@ -46,19 +47,12 @@ public class CurrencyRepository {
             @Override
             public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
                 rows.addAll(response.body().getRows());
-                ContentValues[] codesContentValues = new ContentValues[rows.size()];
-                ContentValues contentValues = new ContentValues();
-                ContentValues helpCV;
                 for (int i = 0; i < rows.size(); i++) {
-                    contentValues.put(CurrencyEntry.COLUMN_CODE, rows.get(i).getCode());
-                    contentValues.put(CurrencyEntry.COLUMN_CRYPTO_NAME, rows.get(i).getName());
-                    helpCV = new ContentValues(contentValues);
-                    codesContentValues[i] = helpCV;
+                    currencyEntities.add(new CurrencyEntity(rows.get(i).getCode(), rows.get(i).getName()));
                 }
-                MyAsync myAsync = new MyAsync(waitForInsertCallback, CurrencyEntry.TABLE_NAME);
-                myAsync.execute(codesContentValues);
+                CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback);
+                currencyAsyncTask.execute((CurrencyEntity[]) currencyEntities.toArray());
             }
-
             @Override
             public void onFailure(Call<CryptoCode> call, Throwable t) {
 
@@ -67,7 +61,7 @@ public class CurrencyRepository {
     }
 
     public void getNames(final FirstCurrencyCallback firstCurrencyCallback) {
-        if (isDbEmpty(sqLiteDatabase, CurrencyEntry.TABLE_NAME)) {
+        if (isDbEmpty()) {
             loadCurrencyCodes(new WaitForInsertCallback() {
                 @Override
                 public void onSuccess() {
@@ -81,7 +75,6 @@ public class CurrencyRepository {
 
     @SuppressLint("HandlerLeak")
     private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
-        String[] projectionCurrency = {CurrencyEntry.COLUMN_CRYPTO_NAME};
         myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
@@ -94,16 +87,12 @@ public class CurrencyRepository {
                 firstCurrencyCallback.onSuccess(names);
             }
         };
-        myHandler.startQuery(0, null, CurrencyEntry.CONTENT_URI,
-                projectionCurrency,
-                null,
-                null,
-                null);
+        myHandler.startQuery();
     }
 
-    private boolean isDbEmpty(SQLiteDatabase db, String tableName) {
+    private boolean isDbEmpty() {
         try {
-            Cursor c = db.rawQuery("SELECT * FROM " + tableName + " LIMIT 1", null);
+            Cursor c = currencyDao.queryOneLine();
             if (c.moveToFirst()) {
                 c.close();
                 return false;
