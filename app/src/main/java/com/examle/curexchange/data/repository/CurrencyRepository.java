@@ -2,9 +2,11 @@ package com.examle.curexchange.data.repository;
 
 import android.annotation.SuppressLint;
 import android.content.AsyncQueryHandler;
+import android.content.AsyncTaskLoader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
 
 import com.examle.curexchange.App;
 import com.examle.curexchange.data.database.DAOs.CurrencyDao;
@@ -53,6 +55,7 @@ public class CurrencyRepository {
                 CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback);
                 currencyAsyncTask.execute((CurrencyEntity[]) currencyEntities.toArray());
             }
+
             @Override
             public void onFailure(Call<CryptoCode> call, Throwable t) {
 
@@ -73,21 +76,25 @@ public class CurrencyRepository {
         }
     }
 
-    @SuppressLint("HandlerLeak")
+    @SuppressLint("StaticFieldLeak")
     private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
-        myHandler = new AsyncQueryHandler(App.getApp().getContentResolver()) {
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                super.onQueryComplete(token, cookie, cursor);
+            protected Void doInBackground(Void... voids) {
+                Cursor cursor = currencyDao.queryCryptoNames();
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
-                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntry.COLUMN_CRYPTO_NAME)));
+                    names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntity.class.getName())));
                 }
-                cursor.close();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
                 firstCurrencyCallback.onSuccess(names);
             }
-        };
-        myHandler.startQuery();
+        }.execute();
     }
 
     private boolean isDbEmpty() {
