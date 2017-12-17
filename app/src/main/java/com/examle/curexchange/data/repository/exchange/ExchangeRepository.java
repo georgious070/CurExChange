@@ -66,20 +66,12 @@ public class ExchangeRepository {
         secondCode = mapOfCodeAndName.get(getSecondName());
         String firstLowerCase = firstCode.toLowerCase();
         String secondLowerCase = secondCode.toLowerCase();
-        String encodedFirst = null;
-        String encodeSecond = null;
-        try {
-            encodedFirst = URLEncoder.encode(firstLowerCase, "UTF-8");
-            encodeSecond = URLEncoder.encode(secondLowerCase, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        apiExchange.getExchange(encodedFirst, encodeSecond).enqueue(new Callback<Object>() {
+        apiExchange.getExchange(firstLowerCase, secondLowerCase).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    if (jsonObject.has("error")) {
+                    if (!jsonObject.getBoolean("success")) {
                         exchangeCallback.onFailure(jsonObject.getString("error"));
                     } else {
                         JSONObject ticker = jsonObject.getJSONObject("ticker");
