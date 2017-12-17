@@ -15,6 +15,11 @@ public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
         public void onSuccess(int result) {
             getViewState().showData(String.valueOf(result));
         }
+
+        @Override
+        public void onFailure(String error) {
+            getViewState().showData(error);
+        }
     };
 
     @Inject

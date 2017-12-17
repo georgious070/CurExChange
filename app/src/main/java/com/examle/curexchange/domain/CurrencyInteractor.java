@@ -1,6 +1,6 @@
 package com.examle.curexchange.domain;
 
-import com.examle.curexchange.data.repository.CurrencyRepository;
+import com.examle.curexchange.data.repository.currency.CurrencyRepository;
 import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import javax.inject.Inject;
