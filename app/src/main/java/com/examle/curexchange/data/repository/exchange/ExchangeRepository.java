@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -64,15 +66,27 @@ public class ExchangeRepository {
         secondCode = mapOfCodeAndName.get(getSecondName());
         String firstLowerCase = firstCode.toLowerCase();
         String secondLowerCase = secondCode.toLowerCase();
-        apiExchange.getExchange(firstLowerCase, secondLowerCase).enqueue(new Callback<Object>() {
+        String encodedFirst = null;
+        String encodeSecond = null;
+        try {
+            encodedFirst = URLEncoder.encode(firstLowerCase, "UTF-8");
+            encodeSecond = URLEncoder.encode(secondLowerCase, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        apiExchange.getExchange(encodedFirst, encodeSecond).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    JSONObject ticker = jsonObject.getJSONObject("ticker");
-                    String multiplier = ticker.getString("price");
-                    exchangeCallback.onSuccess(getResult(multiplier));
-                    insertToHistoryTable(getFirstName(), getSecondName(), Float.parseFloat(multiplier));
+                    if (jsonObject.has("error")) {
+                        exchangeCallback.onFailure(jsonObject.getString("error"));
+                    } else {
+                        JSONObject ticker = jsonObject.getJSONObject("ticker");
+                        String multiplier = ticker.getString("price");
+                        exchangeCallback.onSuccess(getResult(multiplier));
+                        insertToHistoryTable(getFirstName(), getSecondName(), Float.parseFloat(multiplier));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

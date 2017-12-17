@@ -1,7 +1,6 @@
 package com.examle.curexchange.data.repository.currency;
 
 import android.annotation.SuppressLint;
-import android.content.AsyncQueryHandler;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;

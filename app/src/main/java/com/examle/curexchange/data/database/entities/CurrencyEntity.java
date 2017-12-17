@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 @Entity(tableName = CurrencyEntity.CurrencyEntry.TABLE_NAME)
 public class CurrencyEntity {
 
-    public CurrencyEntity(String code, String name) {
+    public CurrencyEntity(@NonNull String code, String name) {
         this.code = code;
         this.name = name;
     }
