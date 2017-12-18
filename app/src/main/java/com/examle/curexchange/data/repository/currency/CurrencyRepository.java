@@ -10,16 +10,17 @@ import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
 import com.examle.curexchange.data.model.pojo.Row;
 import com.examle.curexchange.data.remote.ApiCryptoCode;
-import com.examle.curexchange.ui.home.FirstCurrencyCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class CurrencyRepository {
 
@@ -28,6 +29,8 @@ public class CurrencyRepository {
     private ApiCryptoCode apiCryptoCode;
     private List<CurrencyEntity> currencyEntities;
     private CurrencyDao currencyDao;
+    private final Observable<CryptoCode> observableCryptoCode;
+    private final Observable<Cursor> observableQuery;
 
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode, CurrencyDao currencyDao) {
@@ -36,59 +39,45 @@ public class CurrencyRepository {
         this.rows = new ArrayList<>();
         this.apiCryptoCode = apiCryptoCode;
         this.currencyDao = currencyDao;
+        this.observableCryptoCode = apiCryptoCode.getCryptoCodes();
+        this.observableQuery = currencyDao.queryCryptoNames();
+
     }
 
-    private void loadCurrencyCodes(final WaitForInsertCallback waitForInsertCallback) {
-        apiCryptoCode.getCryptoCodes().enqueue(new Callback<CryptoCode>() {
-            @Override
-            public void onResponse(Call<CryptoCode> call, Response<CryptoCode> response) {
-                rows.addAll(response.body().getRows());
-                for (int i = 0; i < rows.size(); i++) {
-                    currencyEntities.add(new CurrencyEntity(rows.get(i).getCode(), rows.get(i).getName()));
-                }
-                CurrencyAsyncTask currencyAsyncTask = new CurrencyAsyncTask(waitForInsertCallback, currencyDao);
-                currencyAsyncTask.execute(currencyEntities.toArray(new CurrencyEntity[currencyEntities.size()]));
-            }
-
-            @Override
-            public void onFailure(Call<CryptoCode> call, Throwable t) {
-
-            }
-        });
+    public Observable<List<String>> getNames() {
+        Observable<List<String>> ob = Observable.concat(insertToDbFromNetworkCall(), queryData())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        return ob;
     }
 
-    public void getNames(final FirstCurrencyCallback firstCurrencyCallback) {
-        if (isDbEmpty()) {
-            loadCurrencyCodes(new WaitForInsertCallback() {
-                @Override
-                public void onSuccess() {
-                    queryData(firstCurrencyCallback);
-                }
-            });
-        } else {
-            queryData(firstCurrencyCallback);
-        }
+    private Observable<CryptoCode> insertToDbFromNetworkCall(){
+        return observableCryptoCode.subscribeOn(Schedulers.io())
+                .doOnNext(new Consumer<CryptoCode>() {
+                    @Override
+                    public void accept(CryptoCode cryptoCode) throws Exception {
+                        rows.addAll(cryptoCode.getRows());
+                        for (int i = 0; i < rows.size(); i++) {
+                            currencyEntities.add(new CurrencyEntity(rows.get(i).getCode(), rows.get(i).getName()));
+                        }
+                        currencyDao.insertAll(currencyEntities);
+                    }
+                });
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private void queryData(final FirstCurrencyCallback firstCurrencyCallback) {
-        new AsyncTask<Void, Void, Void>() {
+    private Observable<List<String>> queryData() {
+        Function<Cursor, List<String>> fromCursorToList = new Function<Cursor, List<String>>() {
             @Override
-            protected Void doInBackground(Void... voids) {
-                Cursor cursor = currencyDao.queryCryptoNames();
+            public List<String> apply(Cursor cursor) throws Exception {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToNext();
                     names.add(cursor.getString(cursor.getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CRYPTO_NAME)));
                 }
-                return null;
+                return names;
             }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                firstCurrencyCallback.onSuccess(names);
-            }
-        }.execute();
+        };
+        return observableQuery.map(fromCursorToList)
+                .subscribeOn(Schedulers.io());
     }
 
     private boolean isDbEmpty() {
