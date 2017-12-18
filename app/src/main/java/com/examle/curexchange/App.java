@@ -5,6 +5,7 @@ import android.app.Application;
 import com.examle.curexchange.di.component.AppComponent;
 import com.examle.curexchange.di.component.DaggerAppComponent;
 import com.examle.curexchange.di.module.AppModule;
+import com.squareup.leakcanary.LeakCanary;
 
 public class App extends Application {
 
@@ -18,6 +19,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
         app = this;
     }
 
