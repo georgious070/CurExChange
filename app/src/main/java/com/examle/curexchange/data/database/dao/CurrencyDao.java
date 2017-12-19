@@ -11,7 +11,9 @@ import com.examle.curexchange.data.database.entities.CurrencyEntity.CurrencyEntr
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.flowables.ConnectableFlowable;
 
 @Dao
 public interface CurrencyDao {
@@ -23,7 +25,7 @@ public interface CurrencyDao {
     Cursor queryOneLine();
 
     @Query("SELECT " + CurrencyEntry.COLUMN_CRYPTO_NAME + " FROM " + CurrencyEntry.TABLE_NAME)
-    Observable<Cursor> queryCryptoNames();
+    Flowable<List<String>> queryCryptoNames();
 
     @Query("SELECT " + CurrencyEntry.COLUMN_CODE + ", " + CurrencyEntry.COLUMN_CRYPTO_NAME
             + " FROM " + CurrencyEntry.TABLE_NAME + " WHERE "

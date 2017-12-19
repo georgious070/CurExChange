@@ -7,6 +7,7 @@ import com.examle.curexchange.App;
 import com.examle.curexchange.domain.CurrencyInteractor;
 import com.examle.curexchange.ui.base.BasePresenter;
 
+import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
@@ -22,18 +23,8 @@ import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
 public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
     private List<String> names;
-
     @Inject
     CurrencyInteractor currencyInteractor;
-    private FirstCurrencyCallback firstCurrencyCallback = new FirstCurrencyCallback() {
-        @Override
-        public void onSuccess(final List<String> names) {
-            getViewState().showData(names);
-            setNames(names);
-            loadProgress(false);
-
-        }
-    };
 
     public FirstCurrencyPresenter() {
         names = new ArrayList<>();
@@ -52,9 +43,9 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
         loadProgress(true);
-        currencyInteractor.loadData().subscribe(new Observer<List<String>>() {
+        currencyInteractor.loadData().subscribe(new Subscriber<List<String>>() {
             @Override
-            public void onSubscribe(Disposable d) {
+            public void onSubscribe(Subscription s) {
 
             }
 
@@ -65,7 +56,7 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(Throwable t) {
 
             }
 
