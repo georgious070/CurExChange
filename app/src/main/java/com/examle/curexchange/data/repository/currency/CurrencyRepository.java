@@ -1,9 +1,7 @@
 package com.examle.curexchange.data.repository.currency;
 
-import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 
 import com.examle.curexchange.data.database.dao.CurrencyDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
@@ -47,6 +45,7 @@ public class CurrencyRepository {
     public Observable<List<String>> getNames() {
         Observable<List<String>> ob = Observable.concat(insertToDbFromNetworkCall(), queryData())
                 .subscribeOn(Schedulers.io())
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread());
         return ob;
     }
