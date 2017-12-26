@@ -35,7 +35,7 @@ public class CurrencyRepository {
     }
 
     public Flowable<List<String>> getNames() {
-        return Flowable.concat(insertToDbFromNetworkCall(), queryData())
+        return insertToDbFromNetworkCall().concatWith(queryData())
                 .subscribeOn(Schedulers.io());
     }
 

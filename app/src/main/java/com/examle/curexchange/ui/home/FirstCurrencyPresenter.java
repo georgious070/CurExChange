@@ -15,10 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.internal.subscriptions.ArrayCompositeSubscription;
-
 @InjectViewState
 public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
 
@@ -52,6 +48,7 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
             @Override
             public void onNext(List<String> strings) {
                 getViewState().showData(strings);
+                names.addAll(strings);
                 loadProgress(false);
             }
 
