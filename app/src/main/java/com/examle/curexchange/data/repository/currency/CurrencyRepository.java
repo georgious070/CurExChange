@@ -35,7 +35,7 @@ public class CurrencyRepository {
     }
 
     public Flowable<List<String>> getNames() {
-        return Flowable.merge(insertToDbFromNetworkCall(), queryData())
+        return Flowable.concat(insertToDbFromNetworkCall(), queryData())
                 .subscribeOn(Schedulers.io());
     }
 
@@ -59,19 +59,4 @@ public class CurrencyRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation());
     }
-//
-//    private boolean isDbEmpty() {
-//        try {
-//            Cursor c = currencyDao.queryOneLine();
-//            if (c.moveToFirst()) {
-//                c.close();
-//                return false;
-//            } else {
-//                c.close();
-//                return true;
-//            }
-//        } catch (SQLiteException e) {
-//            return true;
-//        }
-//    }
 }

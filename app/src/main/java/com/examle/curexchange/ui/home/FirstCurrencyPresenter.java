@@ -45,8 +45,8 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
         loadProgress(true);
         currencyInteractor.loadData().subscribe(new Subscriber<List<String>>() {
             @Override
-            public void onSubscribe(Subscription s) {
-
+            public void onSubscribe(Subscription subscription) {
+                subscription.request(Long.MAX_VALUE);
             }
 
             @Override
