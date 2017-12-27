@@ -37,12 +37,7 @@ public class FirstCurrencyActivity extends BaseActivity implements FirstCurrency
 
         editText = findViewById(R.id.edit_text);
         firstButton = findViewById(R.id.first_float_button_next);
-        firstButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firstCurrencyPresenter.buttonClicked(editText);
-            }
-        });
+        firstButton.setOnClickListener(v -> firstCurrencyPresenter.buttonClicked(editText));
     }
 
     @Override

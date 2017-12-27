@@ -11,7 +11,7 @@ import com.examle.curexchange.data.database.entities.HistoryEntity;
 
 import static com.examle.curexchange.Constants.DATABASE_VERSION;
 
-@Database(entities = {CurrencyEntity.class, HistoryEntity.class}, version = DATABASE_VERSION)
+@Database(entities = {CurrencyEntity.class, HistoryEntity.class}, version = DATABASE_VERSION, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CurrencyDao currencyDao();
