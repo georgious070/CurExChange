@@ -1,9 +1,15 @@
 package com.examle.curexchange.domain;
 
 import com.examle.curexchange.data.repository.currency.CurrencyRepository;
-import com.examle.curexchange.ui.home.FirstCurrencyCallback;
+
+import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CurrencyInteractor {
 
@@ -14,7 +20,7 @@ public class CurrencyInteractor {
         this.currencyRepository = currencyRepository;
     }
 
-    public void loadData(FirstCurrencyCallback firstCurrencyCallback) {
-        currencyRepository.getNames(firstCurrencyCallback);
+    public Flowable<List<String>> loadData() {
+        return currencyRepository.getNames().observeOn(AndroidSchedulers.mainThread());
     }
 }
