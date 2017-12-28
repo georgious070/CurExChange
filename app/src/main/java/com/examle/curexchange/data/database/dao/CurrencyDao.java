@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.flowables.ConnectableFlowable;
 
 @Dao
@@ -22,7 +23,7 @@ public interface CurrencyDao {
     void insertAll(List<CurrencyEntity> currencies);
 
     @Query("SELECT * FROM " + CurrencyEntry.TABLE_NAME + " LIMIT 1")
-    Cursor queryOneLine();
+    Single<CurrencyEntity> queryOneLine();
 
     @Query("SELECT " + CurrencyEntry.COLUMN_CRYPTO_NAME + " FROM " + CurrencyEntry.TABLE_NAME)
     Flowable<List<String>> queryCryptoNames();

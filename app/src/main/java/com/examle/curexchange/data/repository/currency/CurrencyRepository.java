@@ -1,8 +1,5 @@
 package com.examle.curexchange.data.repository.currency;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
-
 import com.examle.curexchange.data.database.dao.CurrencyDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.model.pojo.CryptoCode;
@@ -16,6 +13,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class CurrencyRepository {
@@ -24,8 +22,9 @@ public class CurrencyRepository {
     private final List<Row> rows;
     private List<CurrencyEntity> currencyEntities;
     private CurrencyDao currencyDao;
-    private final Flowable<CryptoCode> observableCryptoCode;
-    private final Flowable<List<String>> observableQuery;
+    private final Flowable<CryptoCode> flowableApiCryptoCode;
+    private final Flowable<List<String>> flowableDbQuery;
+    private boolean isDbEmpty;
 
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode, CurrencyDao currencyDao) {
@@ -33,8 +32,8 @@ public class CurrencyRepository {
         this.names = new ArrayList<>();
         this.rows = new ArrayList<>();
         this.currencyDao = currencyDao;
-        this.observableCryptoCode = apiCryptoCode.getCryptoCodes();
-        this.observableQuery = currencyDao.queryCryptoNames();
+        this.flowableApiCryptoCode = apiCryptoCode.getCryptoCodes();
+        this.flowableDbQuery = currencyDao.queryCryptoNames();
     }
 
     public Flowable<List<String>> getNames() {
@@ -42,13 +41,13 @@ public class CurrencyRepository {
     }
 
     private Flowable<List<String>> queryData() {
-        return observableCryptoCode
+        return flowableApiCryptoCode
                 .subscribeOn(Schedulers.io())
                 .flatMap(code -> {
-                    if (isDbEmpty()) {
+                    if (!isDbEmpty()) {
                         insertToDbFromNetwork(code);
                     }
-                    return observableQuery
+                    return flowableDbQuery
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .doOnNext(entityNames -> names.addAll(entityNames));
@@ -65,17 +64,22 @@ public class CurrencyRepository {
     }
 
     private boolean isDbEmpty() {
-        try {
-            Cursor c = currencyDao.queryOneLine();
-            if (c.moveToFirst()) {
-                c.close();
-                return false;
-            } else {
-                c.close();
-                return true;
-            }
-        } catch (SQLiteException e) {
-            return true;
-        }
+        currencyDao.queryOneLine()
+                .subscribe(new DisposableSingleObserver<CurrencyEntity>() {
+                    @Override
+                    public void onSuccess(CurrencyEntity currencyEntity) {
+                        if (currencyEntity != null) {
+                            isDbEmpty = true;
+                        } else {
+                            isDbEmpty = false;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+        return isDbEmpty;
     }
 }
