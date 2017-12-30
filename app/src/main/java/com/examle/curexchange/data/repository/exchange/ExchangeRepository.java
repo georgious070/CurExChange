@@ -1,8 +1,5 @@
 package com.examle.curexchange.data.repository.exchange;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
-
 import com.examle.curexchange.data.database.dao.CurrencyDao;
 import com.examle.curexchange.data.database.dao.HistoryDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
@@ -12,8 +9,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +17,9 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.DisposableSubscriber;
 
 public class ExchangeRepository {
 
@@ -60,7 +54,8 @@ public class ExchangeRepository {
                 .flatMap(stringStringHashMap -> apiExchange
                         .getExchange(stringStringHashMap.get(getFirstName().toLowerCase()),
                                 stringStringHashMap.get(getSecondName()).toLowerCase())
-                        .map(response -> multiplyResult(currencyRateFromJson(response))));
+                        .map(response -> multiplyResult(currencyRateFromJson(response))))
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     private Flowable<HashMap<String, String>> queryCodesFromDB() {
@@ -71,6 +66,7 @@ public class ExchangeRepository {
             return mapOfCodeAndName;
         };
         return currencyDao.queryCryptoCodesByCryptoNames(getFirstName(), getSecondName())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(function);
     }
 

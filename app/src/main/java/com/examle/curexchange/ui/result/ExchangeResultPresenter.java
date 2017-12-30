@@ -5,7 +5,14 @@ import com.examle.curexchange.App;
 import com.examle.curexchange.domain.ExchangeInteractor;
 import com.examle.curexchange.ui.base.BasePresenter;
 
+import org.reactivestreams.Subscription;
+
 import javax.inject.Inject;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 @InjectViewState
 public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
@@ -26,6 +33,22 @@ public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        exchangeInteractor.getResult(firstName, secondName, value);
+        exchangeInteractor.getResult(firstName, secondName, value)
+                .subscribe(new DisposableObserver<Float>() {
+                    @Override
+                    public void onNext(Float result) {
+                        getViewState().showData(result.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

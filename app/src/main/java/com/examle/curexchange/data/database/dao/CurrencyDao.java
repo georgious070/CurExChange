@@ -33,5 +33,5 @@ public interface CurrencyDao {
             + " FROM " + CurrencyEntry.TABLE_NAME + " WHERE "
             + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:firstCryptoName" + " OR "
             + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:secondCryptoName")
-    PublishProcessor<List<CurrencyEntity>> queryCryptoCodesByCryptoNames(String firstCryptoName, String secondCryptoName);
+    Flowable<List<CurrencyEntity>> queryCryptoCodesByCryptoNames(String firstCryptoName, String secondCryptoName);
 }
