@@ -44,7 +44,7 @@ public class CurrencyRepository {
         return flowableApiCryptoCode
                 .subscribeOn(Schedulers.io())
                 .flatMap(code -> {
-                    if (!isDbEmpty()) {
+                    if (isDbEmpty()) {
                         insertToDbFromNetwork(code);
                     }
                     return flowableDbQuery
@@ -69,9 +69,9 @@ public class CurrencyRepository {
                     @Override
                     public void onSuccess(CurrencyEntity currencyEntity) {
                         if (currencyEntity != null) {
-                            isDbEmpty = true;
-                        } else {
                             isDbEmpty = false;
+                        } else {
+                            isDbEmpty = true;
                         }
                     }
 

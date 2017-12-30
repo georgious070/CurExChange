@@ -10,18 +10,6 @@ import javax.inject.Inject;
 @InjectViewState
 public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
 
-    private ExchangeCallback exchangeCallback = new ExchangeCallback() {
-        @Override
-        public void onSuccess(int result) {
-            getViewState().showData(String.valueOf(result));
-        }
-
-        @Override
-        public void onFailure(String error) {
-            getViewState().showData(error);
-        }
-    };
-
     @Inject
     ExchangeInteractor exchangeInteractor;
     private String firstName;
@@ -38,6 +26,6 @@ public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        exchangeInteractor.getResult(exchangeCallback, firstName, secondName, value);
+        exchangeInteractor.getResult(firstName, secondName, value);
     }
 }

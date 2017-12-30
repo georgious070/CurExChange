@@ -15,6 +15,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.flowables.ConnectableFlowable;
+import io.reactivex.processors.PublishProcessor;
 
 @Dao
 public interface CurrencyDao {
@@ -32,5 +33,5 @@ public interface CurrencyDao {
             + " FROM " + CurrencyEntry.TABLE_NAME + " WHERE "
             + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:firstCryptoName" + " OR "
             + CurrencyEntry.COLUMN_CRYPTO_NAME + "=:secondCryptoName")
-    Cursor queryCryptoCodesByCryptoNames(String firstCryptoName, String secondCryptoName);
+    PublishProcessor<List<CurrencyEntity>> queryCryptoCodesByCryptoNames(String firstCryptoName, String secondCryptoName);
 }

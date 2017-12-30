@@ -1,7 +1,6 @@
 package com.examle.curexchange.data.repository.exchange;
 
 import android.annotation.SuppressLint;
-import android.database.Cursor;
 import android.os.AsyncTask;
 
 import com.examle.curexchange.data.database.dao.CurrencyDao;
@@ -9,26 +8,27 @@ import com.examle.curexchange.data.database.dao.HistoryDao;
 import com.examle.curexchange.data.database.entities.CurrencyEntity;
 import com.examle.curexchange.data.database.entities.HistoryEntity;
 import com.examle.curexchange.data.remote.ApiExchange;
-import com.examle.curexchange.ui.result.ExchangeCallback;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 public class ExchangeRepository {
 
-    private String firstCode;
-    private String secondCode;
     private int value;
     private String firstName;
     private String secondName;
@@ -45,93 +45,61 @@ public class ExchangeRepository {
         this.currencyDao = currencyDao;
     }
 
-    public void getResult(final ExchangeCallback exchangeCallback,
-                          String firstName,
-                          String secondName,
-                          int value) {
+    public Observable<Float> getResult(String firstName,
+                                       String secondName,
+                                       int value) {
         setFirstName(firstName);
         setSecondName(secondName);
         setValue(value);
-        queryCodesFromDB(new QueryCodeCallback() {
-            @Override
-            public void onSuccess(HashMap<String, String> mapOfCodeAndName) {
-                loadExchangeValue(exchangeCallback, mapOfCodeAndName);
-            }
-        });
+        return loadExchangeValue().toObservable();
     }
 
-    public void loadExchangeValue(final ExchangeCallback exchangeCallback,
-                                  HashMap<String, String> mapOfCodeAndName) {
-        firstCode = mapOfCodeAndName.get(getFirstName());
-        secondCode = mapOfCodeAndName.get(getSecondName());
-        String firstLowerCase = firstCode.toLowerCase();
-        String secondLowerCase = secondCode.toLowerCase();
-        apiExchange.getExchange(firstLowerCase, secondLowerCase).enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    if (!jsonObject.getBoolean("success")) {
-                        exchangeCallback.onFailure(jsonObject.getString("error"));
-                    } else {
-                        JSONObject ticker = jsonObject.getJSONObject("ticker");
-                        String multiplier = ticker.getString("price");
-                        exchangeCallback.onSuccess(getResult(multiplier));
-                        insertToHistoryTable(getFirstName(), getSecondName(), Float.parseFloat(multiplier));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
+    public Flowable<Float> loadExchangeValue() {
+        return queryCodesFromDB()
+                .subscribeOn(Schedulers.io())
+                .flatMap(stringStringHashMap -> apiExchange
+                        .getExchange(stringStringHashMap.get(getFirstName().toLowerCase()),
+                                stringStringHashMap.get(getSecondName()).toLowerCase())
+                        .map(response -> multiplyResult(currencyRateFromJson(response))));
     }
 
-    @SuppressLint("StaticFieldLeak")
+    private Flowable<HashMap<String, String>> queryCodesFromDB() {
+        Function<List<CurrencyEntity>, HashMap<String, String>> function = entities -> {
+            for (int i = 0; i < entities.size(); i++) {
+                mapOfCodeAndName.put(entities.get(i).getName(), entities.get(i).getCode());
+            }
+            return mapOfCodeAndName;
+        };
+        return currencyDao.queryCryptoCodesByCryptoNames(getFirstName(), getSecondName())
+                .map(function);
+    }
+
+    private String currencyRateFromJson(Object response) {
+        String rate = null;
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(new Gson().toJson(response));
+            if (!jsonObject.getBoolean("success")) {
+                jsonObject.getString("error");
+            } else {
+                JSONObject ticker = jsonObject.getJSONObject("ticker");
+                rate = ticker.getString("price");
+                insertToHistoryTable(getFirstName(), getSecondName(), Float.parseFloat(rate));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return rate;
+    }
+
+    private Float multiplyResult(String rate) {
+        float multiplier = (int) Float.parseFloat(rate);
+        return getValue() * multiplier;
+    }
+
     private void insertToHistoryTable(String firstName, String secondName, float result) {
         HistoryEntity historyEntity = new HistoryEntity(firstName, secondName, result);
-        new AsyncTask<HistoryEntity, Void, Void>() {
-            @Override
-            protected Void doInBackground(HistoryEntity... historyEntities) {
-                historyDao.insertOneRaw(historyEntities[0]);
-                return null;
-            }
-        }.execute(historyEntity);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private void queryCodesFromDB(final QueryCodeCallback queryCodeCallback) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                Cursor cursor = currencyDao.queryCryptoCodesByCryptoNames(getFirstName(), getSecondName());
-                int columnIndexName = cursor
-                        .getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CRYPTO_NAME);
-                int columnIndexCode = cursor
-                        .getColumnIndex(CurrencyEntity.CurrencyEntry.COLUMN_CODE);
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    cursor.moveToNext();
-                    mapOfCodeAndName.put(cursor.getString(columnIndexName),
-                            cursor.getString(columnIndexCode));
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                queryCodeCallback.onSuccess(mapOfCodeAndName);
-            }
-        }.execute();
-    }
-
-    private int getResult(String multiplier) {
-        int multipl = (int) Float.parseFloat(multiplier);
-        return getValue() * multipl;
+        historyDao.insertOneRaw(historyEntity);
     }
 
     private int getValue() {

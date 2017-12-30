@@ -1,9 +1,10 @@
 package com.examle.curexchange.domain;
 
 import com.examle.curexchange.data.repository.exchange.ExchangeRepository;
-import com.examle.curexchange.ui.result.ExchangeCallback;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 public class ExchangeInteractor {
 
@@ -14,7 +15,7 @@ public class ExchangeInteractor {
         this.exchangeRepository = exchangeRepository;
     }
 
-    public void getResult(ExchangeCallback exchangeCallback, String firstName, String secondName, int value) {
-        exchangeRepository.getResult(exchangeCallback, firstName, secondName, value);
+    public Observable<Float> getResult(String firstName, String secondName, int value) {
+        return exchangeRepository.getResult(firstName, secondName, value);
     }
 }
