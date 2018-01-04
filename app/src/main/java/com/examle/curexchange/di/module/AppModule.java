@@ -80,7 +80,6 @@ public class AppModule {
     AppDatabase provideAppDatabase(App app) {
         return Room
                 .databaseBuilder(app, AppDatabase.class, Constants.DATABASE_NAME)
-                .allowMainThreadQueries()
                 .build();
     }
 

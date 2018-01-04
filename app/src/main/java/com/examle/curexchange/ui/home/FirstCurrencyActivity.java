@@ -3,7 +3,6 @@ package com.examle.curexchange.ui.home;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.EditText;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
