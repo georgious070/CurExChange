@@ -9,6 +9,7 @@ import com.examle.curexchange.R
 import com.examle.curexchange.ui.adapter.CurrencyAdapter
 import com.examle.curexchange.ui.base.BaseActivity
 import com.examle.curexchange.ui.second.SecondCurrencyActivity
+import kotlinx.android.synthetic.main.activity_first_currency.*
 
 class FirstCurrencyActivity : BaseActivity(),
         FirstCurrencyView,
@@ -35,7 +36,7 @@ class FirstCurrencyActivity : BaseActivity(),
     }
 
     override fun showToast(error: String) {
-
+        //no-op
     }
 
     override fun showData(names: MutableList<String>) {

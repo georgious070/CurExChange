@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -24,7 +25,7 @@ public class CurrencyRepository {
     private CurrencyDao currencyDao;
     private final Flowable<CryptoCode> flowableApiCryptoCode;
     private final Flowable<List<String>> flowableDbQuery;
-    private boolean isDbEmpty;
+    private boolean isDbEmpty = true;
 
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode, CurrencyDao currencyDao) {
@@ -44,7 +45,7 @@ public class CurrencyRepository {
         return flowableApiCryptoCode
                 .subscribeOn(Schedulers.io())
                 .flatMap(code -> {
-                    if (isDbEmpty()) {
+                   if (isDbEmpty()) {
                         insertToDbFromNetwork(code);
                     }
                     return flowableDbQuery
@@ -65,7 +66,7 @@ public class CurrencyRepository {
 
     private boolean isDbEmpty() {
         currencyDao.queryOneLine()
-                .subscribe(new DisposableSingleObserver<CurrencyEntity>() {
+                .subscribe(new DisposableMaybeObserver<CurrencyEntity>() {
                     @Override
                     public void onSuccess(CurrencyEntity currencyEntity) {
                         if (currencyEntity != null) {
@@ -77,6 +78,11 @@ public class CurrencyRepository {
 
                     @Override
                     public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });
