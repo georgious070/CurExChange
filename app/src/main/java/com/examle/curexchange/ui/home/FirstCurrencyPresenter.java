@@ -64,7 +64,7 @@ public class FirstCurrencyPresenter extends BasePresenter<FirstCurrencyView> {
         });
     }
 
-    public void buttonClicked(EditText editText) {
+    public void onFloatButtonClick(EditText editText) {
         int value = Integer.parseInt(editText.getText().toString());
         getViewState().handleFloatButton(getNames(), value);
     }
