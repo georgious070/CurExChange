@@ -4,6 +4,7 @@ import com.examle.curexchange.data.repository.exchange.ExchangeRepository;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 public class ExchangeInteractor {
@@ -15,7 +16,7 @@ public class ExchangeInteractor {
         this.exchangeRepository = exchangeRepository;
     }
 
-    public Observable<Float> getResult(String firstName, String secondName, int value) {
+    public Flowable<Float> getResult(String firstName, String secondName, int value) {
         return exchangeRepository.getResult(firstName, secondName, value);
     }
 }

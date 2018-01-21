@@ -13,8 +13,8 @@ open class BaseActivity : MvpAppCompatActivity(), BaseView {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showProgress(inProgress: Boolean) {
-        if (inProgress) {
+    override fun showProgress(isShow: Boolean) {
+        if (isShow) {
             if (progressDialog != null) {
                 progressDialog!!.show()
             } else {

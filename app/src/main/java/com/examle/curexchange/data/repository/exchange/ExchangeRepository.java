@@ -39,13 +39,13 @@ public class ExchangeRepository {
         this.currencyDao = currencyDao;
     }
 
-    public Observable<Float> getResult(String firstName,
+    public Flowable<Float> getResult(String firstName,
                                        String secondName,
                                        int value) {
         setFirstName(firstName);
         setSecondName(secondName);
         setValue(value);
-        return loadExchangeValue().toObservable();
+        return loadExchangeValue();
     }
 
     public Flowable<Float> loadExchangeValue() {
