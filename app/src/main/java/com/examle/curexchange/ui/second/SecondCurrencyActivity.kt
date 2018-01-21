@@ -34,7 +34,8 @@ class SecondCurrencyActivity : BaseActivity(),
 
     @ProvidePresenter
     fun providePresenter(): SecondCurrencyPresenter {
-        return SecondCurrencyPresenter(intent.getStringArrayListExtra(Constants.INTENT_KEY_NAMES),
+        return SecondCurrencyPresenter(
+                intent.getStringArrayListExtra(Constants.INTENT_KEY_NAMES),
                 intent.getStringExtra(Constants.INTENT_KEY_FIRST_NAME),
                 intent.getIntExtra(Constants.INTENT_KEY_VALUE, 0))
     }

@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatActivity
 
-
 open class BaseActivity : MvpAppCompatActivity(), BaseView {
 
     var progressDialog: ProgressDialog? = null

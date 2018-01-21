@@ -10,7 +10,6 @@ import com.examle.curexchange.R
 import com.examle.curexchange.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_exchange_result.*
 
-
 class ExchangeResultActivity : BaseActivity(), ExchangeResultView {
 
     @InjectPresenter lateinit var exchangeResultPresenter: ExchangeResultPresenter

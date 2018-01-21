@@ -20,12 +20,11 @@ class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         loadProgress(true)
-        currencyInteractor.loadData().subscribe(
-                { n ->
-                    viewState.showData(n)
-                    names.addAll(n)
-                    loadProgress(false)
-                })
+        currencyInteractor.loadData().subscribe { n ->
+            viewState.showData(n)
+            names.addAll(n)
+            loadProgress(false)
+        }
     }
 
     fun onFloatButtonNextClicked(editText: EditText) {
