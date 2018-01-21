@@ -13,12 +13,11 @@ import kotlinx.android.synthetic.main.activity_exchange_result.*
 
 class ExchangeResultActivity : BaseActivity(), ExchangeResultView {
 
-    @InjectPresenter
-    lateinit var exchangeResultPresenter: ExchangeResultPresenter
+    @InjectPresenter lateinit var exchangeResultPresenter: ExchangeResultPresenter
 
     companion object {
         fun getIntent(context: Context, firstName: String, secondName: String, value: Int): Intent {
-            val intent: Intent = Intent(context, ExchangeResultActivity::class.java)
+            val intent = Intent(context, ExchangeResultActivity::class.java)
             intent.putExtra(Constants.INTENT_KEY_FIRST_NAME, firstName)
             intent.putExtra(Constants.INTENT_KEY_SECOND_NAME, secondName)
             intent.putExtra(Constants.INTENT_KEY_VALUE, value)
@@ -28,7 +27,8 @@ class ExchangeResultActivity : BaseActivity(), ExchangeResultView {
 
     @ProvidePresenter
     fun providePresenter(): ExchangeResultPresenter {
-        return ExchangeResultPresenter(intent.getStringExtra(Constants.INTENT_KEY_FIRST_NAME),
+        return ExchangeResultPresenter(
+                intent.getStringExtra(Constants.INTENT_KEY_FIRST_NAME),
                 intent.getStringExtra(Constants.INTENT_KEY_SECOND_NAME),
                 intent.getIntExtra(Constants.INTENT_KEY_VALUE, 0))
     }
