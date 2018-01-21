@@ -5,14 +5,9 @@ import com.examle.curexchange.App;
 import com.examle.curexchange.domain.ExchangeInteractor;
 import com.examle.curexchange.ui.base.BasePresenter;
 
-import org.reactivestreams.Subscription;
-
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.subscribers.DisposableSubscriber;
 
 @InjectViewState
 public class ExchangeResultPresenter extends BasePresenter<ExchangeResultView> {
