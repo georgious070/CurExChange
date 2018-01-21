@@ -50,7 +50,7 @@ class SecondCurrencyActivity : BaseActivity(),
                 .setOnClickListener { secondCurrencyPresenter.onFloatButtonExchangeClicked() }
     }
 
-    override fun showData(names: MutableList<String>) {
+    override fun showData(names: List<String>) {
         currencyAdapter.setData(names)
     }
 
