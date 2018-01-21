@@ -11,10 +11,9 @@ import javax.inject.Inject
 class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
 
     @Inject lateinit var currencyInteractor: CurrencyInteractor
-    private var names: MutableList<String>
+    private var names: MutableList<String> = ArrayList()
 
     init {
-        names = ArrayList()
         App.getApp().appComponent.inject(this)
     }
 
@@ -24,7 +23,7 @@ class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
         currencyInteractor.loadData().subscribe(
                 { n ->
                     viewState.showData(n)
-                    names = n
+                    names.addAll(n)
                     loadProgress(false)
                 })
     }
