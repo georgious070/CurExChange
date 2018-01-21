@@ -23,7 +23,8 @@ class FirstCurrencyActivity : BaseActivity(),
         currencyAdapter = CurrencyAdapter(ArrayList(), this)
         recycler_view_first_currency.adapter = currencyAdapter
 
-        first_float_button_next.setOnClickListener { firstCurrencyPresenter.onFloatButtonClick(edit_text) }
+        first_float_button_next
+                .setOnClickListener { firstCurrencyPresenter.onFloatButtonNextClicked(edit_text) }
     }
 
     override fun showData(names: MutableList<String>) {

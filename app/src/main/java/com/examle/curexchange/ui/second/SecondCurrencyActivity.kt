@@ -11,7 +11,6 @@ import com.examle.curexchange.ui.adapter.CurrencyAdapter
 import com.examle.curexchange.ui.base.BaseActivity
 import com.examle.curexchange.ui.result.ExchangeResultActivity
 import kotlinx.android.synthetic.main.activity_second_currency.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SecondCurrencyActivity : BaseActivity(),
@@ -47,8 +46,8 @@ class SecondCurrencyActivity : BaseActivity(),
         currencyAdapter = CurrencyAdapter(ArrayList(), this)
         recycler_view_second_currency.adapter = currencyAdapter
 
-        second_float_button_exchange.setOnClickListener { secondCurrencyPresenter.buttonClicked() }
-        var a: Int = 2
+        second_float_button_exchange
+                .setOnClickListener { secondCurrencyPresenter.onFloatButtonExchangeClicked() }
     }
 
     override fun showData(names: MutableList<String>) {
