@@ -1,9 +1,6 @@
 package com.examle.curexchange.ui.home
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.RecyclerView
-import android.widget.EditText
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.examle.curexchange.R
 import com.examle.curexchange.ui.adapter.CurrencyAdapter
@@ -16,23 +13,17 @@ class FirstCurrencyActivity : BaseActivity(),
         CurrencyAdapter.OnRecyclerItemClickedListener {
 
     @InjectPresenter lateinit var firstCurrencyPresenter: FirstCurrencyPresenter
-    private var firstCurrencyRecyclerView: RecyclerView? = null
     private var currencyAdapter: CurrencyAdapter? = null
-    private var firstFloatingButton: FloatingActionButton? = null
-    private var editText: EditText? = null
     private var firstName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_currency)
 
-        firstCurrencyRecyclerView = findViewById(R.id.recycler_view_first_currency)
         currencyAdapter = CurrencyAdapter(ArrayList(), this)
-        firstCurrencyRecyclerView!!.adapter = currencyAdapter
+        recycler_view_first_currency.adapter = currencyAdapter
 
-        editText = findViewById(R.id.edit_text)
-        firstFloatingButton = findViewById(R.id.first_float_button_next)
-        firstFloatingButton!!.setOnClickListener { firstCurrencyPresenter.onFloatButtonClick(editText) }
+        first_float_button_next.setOnClickListener { firstCurrencyPresenter.onFloatButtonClick(edit_text) }
     }
 
     override fun showToast(error: String) {
