@@ -28,7 +28,7 @@ class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
                 })
     }
 
-    fun onFloatButtonClick(editText: EditText) {
+    fun onFloatButtonNextClicked(editText: EditText) {
         var value: Int = Integer.parseInt(editText.text.toString())
         viewState.handleFloatButton(names, value)
     }

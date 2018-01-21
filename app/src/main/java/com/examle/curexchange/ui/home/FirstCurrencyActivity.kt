@@ -13,8 +13,8 @@ class FirstCurrencyActivity : BaseActivity(),
         CurrencyAdapter.OnRecyclerItemClickedListener {
 
     @InjectPresenter lateinit var firstCurrencyPresenter: FirstCurrencyPresenter
-    private var currencyAdapter: CurrencyAdapter? = null
-    private var firstName: String? = null
+    private lateinit var currencyAdapter: CurrencyAdapter
+    private lateinit var firstName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +23,12 @@ class FirstCurrencyActivity : BaseActivity(),
         currencyAdapter = CurrencyAdapter(ArrayList(), this)
         recycler_view_first_currency.adapter = currencyAdapter
 
-        first_float_button_next.setOnClickListener { firstCurrencyPresenter.onFloatButtonClick(edit_text) }
-    }
-
-    override fun showToast(error: String) {
-        //no-op
+        first_float_button_next
+                .setOnClickListener { firstCurrencyPresenter.onFloatButtonNextClicked(edit_text) }
     }
 
     override fun showData(names: MutableList<String>) {
-        currencyAdapter!!.setData(names)
+        currencyAdapter.setData(names)
     }
 
     override fun handleFloatButton(names: MutableList<String>, value: Int) {
