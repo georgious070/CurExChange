@@ -38,7 +38,7 @@ public class AppModule {
     @Provides
     @Singleton
     App provideApp() {
-        return App.getApp();
+        return App.Companion.getApp();
     }
 
     @Provides

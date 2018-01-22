@@ -14,7 +14,7 @@ class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
     private var names: MutableList<String> = ArrayList()
 
     init {
-        App.getApp().appComponent.inject(this)
+        App.appComponent.inject(this)
     }
 
     override fun onFirstViewAttach() {

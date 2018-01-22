@@ -13,7 +13,7 @@ class ExchangeResultPresenter(var firstName: String, var secondName: String, var
     lateinit var exchangeInteractor: ExchangeInteractor
 
     init {
-        App.getApp().appComponent.inject(this)
+        App.appComponent.inject(this)
     }
 
     override fun onFirstViewAttach() {
