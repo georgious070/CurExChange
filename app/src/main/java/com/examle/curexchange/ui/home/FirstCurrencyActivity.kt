@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_first_currency.*
 
 class FirstCurrencyActivity : BaseActivity(),
         FirstCurrencyView,
-        CurrencyAdapter.OnRecyclerItemClickedListener {
+        CurrencyAdapter.OnRecyclerItemClickListener {
 
     @InjectPresenter lateinit var firstCurrencyPresenter: FirstCurrencyPresenter
     private lateinit var currencyAdapter: CurrencyAdapter

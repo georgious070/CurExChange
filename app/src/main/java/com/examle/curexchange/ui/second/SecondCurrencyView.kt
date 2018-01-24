@@ -7,7 +7,7 @@ import com.examle.curexchange.ui.base.BaseView
 @StateStrategyType(AddToEndStrategy::class)
 interface SecondCurrencyView : BaseView {
 
-    fun showData(names: List<String>)
+    fun showData(names: MutableList<String>)
 
     fun handleFloatButton(firstName: String, value: Int)
 }
