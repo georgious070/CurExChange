@@ -1,7 +1,7 @@
 package com.examle.curexchange.ui.result
 
 import com.arellomobile.mvp.InjectViewState
-import com.examle.curexchange.App
+import com.examle.curexchange.App.Companion.app
 import com.examle.curexchange.domain.ExchangeInteractor
 import com.examle.curexchange.ui.base.BasePresenter
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class ExchangeResultPresenter(var firstName: String, var secondName: String, var
     lateinit var exchangeInteractor: ExchangeInteractor
 
     init {
-        App.appComponent.inject(this)
+        app.appComponent.inject(this)
     }
 
     override fun onFirstViewAttach() {
