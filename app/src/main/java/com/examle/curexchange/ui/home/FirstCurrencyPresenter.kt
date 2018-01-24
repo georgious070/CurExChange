@@ -3,6 +3,7 @@ package com.examle.curexchange.ui.home
 import android.widget.EditText
 import com.arellomobile.mvp.InjectViewState
 import com.examle.curexchange.App
+import com.examle.curexchange.App.Companion.app
 import com.examle.curexchange.domain.CurrencyInteractor
 import com.examle.curexchange.ui.base.BasePresenter
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class FirstCurrencyPresenter : BasePresenter<FirstCurrencyView>() {
     private var names: MutableList<String> = ArrayList()
 
     init {
-        App.appComponent.inject(this)
+        app.appComponent.inject(this)
     }
 
     override fun onFirstViewAttach() {
