@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 class SecondCurrencyActivity : BaseActivity(),
         SecondCurrencyView,
-        CurrencyAdapter.OnRecyclerItemClickedListener {
+        CurrencyAdapter.OnRecyclerItemClickListener {
 
     @InjectPresenter
     lateinit var secondCurrencyPresenter: SecondCurrencyPresenter
@@ -51,7 +51,7 @@ class SecondCurrencyActivity : BaseActivity(),
                 .setOnClickListener { secondCurrencyPresenter.onFloatButtonExchangeClicked() }
     }
 
-    override fun showData(names: List<String>) {
+    override fun showData(names: MutableList<String>) {
         currencyAdapter.setData(names)
     }
 
