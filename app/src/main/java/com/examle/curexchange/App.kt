@@ -24,6 +24,7 @@ class App : Application() {
         if (LeakCanary.isInAnalyzerProcess(this)) {
             return
         }
+
         LeakCanary.install(this)
         app = this
         appComponent.inject(this)

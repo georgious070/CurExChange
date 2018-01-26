@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import com.examle.curexchange.R
 import kotlinx.android.synthetic.main.currency_item_view.view.*
 
-
 class CurrencyAdapter(private val currencyList: MutableList<String>,
                       private val listener: OnRecyclerItemClickListener)
     : RecyclerView.Adapter<CurrencyAdapter.ViewHolder>() {
