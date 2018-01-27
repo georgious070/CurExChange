@@ -26,54 +26,47 @@ class AppModule(val app: App) {
     @Provides
     @Singleton
     @Named("codes")
-    fun provideRetrofitCryptoCode(): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(Constants.CRYPTO_CODE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-    }
+    fun provideRetrofitCryptoCode(): Retrofit =
+            Retrofit.Builder()
+                    .baseUrl(Constants.CRYPTO_CODE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build()
 
     @Provides
     @Singleton
-    fun provideCryptoCodeApi(@Named("codes") retrofit: Retrofit): ApiCryptoCode {
-        return retrofit.create(ApiCryptoCode::class.java)
-    }
+    fun provideCryptoCodeApi(@Named("codes") retrofit: Retrofit): ApiCryptoCode =
+            retrofit.create(ApiCryptoCode::class.java)
 
     @Provides
     @Singleton
     @Named("exchange")
-    fun provideExchangeRetrofit(): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(Constants.EXCHANGE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-    }
+    fun provideExchangeRetrofit(): Retrofit =
+            Retrofit.Builder()
+                    .baseUrl(Constants.EXCHANGE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build()
 
     @Provides
     @Singleton
-    fun provideExchangeApi(@Named("exchange") retrofit: Retrofit): ApiExchange {
-        return retrofit.create(ApiExchange::class.java)
-    }
+    fun provideExchangeApi(@Named("exchange") retrofit: Retrofit): ApiExchange =
+            retrofit.create(ApiExchange::class.java)
 
     @Provides
     @Singleton
-    fun provideAppDatabase(app: App): AppDatabase {
-        return Room
-                .databaseBuilder(app, AppDatabase::class.java, Constants.DATABASE_NAME)
-                .build()
-    }
+    fun provideAppDatabase(app: App): AppDatabase =
+            Room.databaseBuilder(app, AppDatabase::class.java, Constants.DATABASE_NAME)
+                    .build()
+
 
     @Provides
     @Singleton
-    fun provideCurrencyDao(appDatabase: AppDatabase): CurrencyDao {
-        return appDatabase.currencyDao()
-    }
+    fun provideCurrencyDao(appDatabase: AppDatabase): CurrencyDao = appDatabase.currencyDao()
+
 
     @Provides
     @Singleton
-    fun provideHistoryDao(appDatabase: AppDatabase): HistoryDao {
-        return appDatabase.historyDao()
-    }
+    fun provideHistoryDao(appDatabase: AppDatabase): HistoryDao =
+            appDatabase.historyDao()
 }
