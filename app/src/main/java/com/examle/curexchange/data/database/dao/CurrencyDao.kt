@@ -20,7 +20,7 @@ interface CurrencyDao {
     fun queryOneLine(): Maybe<CurrencyEntity>
 
     @Query("SELECT " + CurrencyConstants.COLUMN_CRYPTO_NAME + " FROM " + CurrencyConstants.TABLE_NAME)
-    fun queryCryptoNames(): Flowable<List<String>>
+    fun queryCryptoNames(): Flowable<MutableList<String>>
 
     @Query("SELECT " + CurrencyConstants.COLUMN_CODE + ", " + CurrencyConstants.COLUMN_CRYPTO_NAME
             + " FROM " + CurrencyConstants.TABLE_NAME + " WHERE "
