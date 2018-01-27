@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CurrencyRepository {
 
-    private List<String> names;
+    private List<String> namesList;
     private final List<Row> rows;
     private List<CurrencyEntity> currencyEntities;
     private CurrencyDao currencyDao;
@@ -29,7 +29,7 @@ public class CurrencyRepository {
     @Inject
     public CurrencyRepository(ApiCryptoCode apiCryptoCode, CurrencyDao currencyDao) {
         this.currencyEntities = new ArrayList<>();
-        this.names = new ArrayList<>();
+        this.namesList = new ArrayList<>();
         this.rows = new ArrayList<>();
         this.currencyDao = currencyDao;
         this.flowableApiCryptoCode = apiCryptoCode.getCryptoCodes();
@@ -50,7 +50,7 @@ public class CurrencyRepository {
                     return flowableDbQuery
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .doOnNext(entityNames -> names.addAll(entityNames));
+                            .doOnNext(entityNames -> namesList.addAll(entityNames));
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
