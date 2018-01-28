@@ -22,7 +22,7 @@ class ExchangeRepository @Inject constructor(val apiExchange: ApiExchange,
                 .subscribeOn(Schedulers.io())
                 .map { entities ->
                     for (i in entities.indices) {
-                        mapOfCodeAndName.put(entities[i].name , entities[i].code)
+                        mapOfCodeAndName.put(entities[i].name, entities[i].code)
                     }
                     mapOfCodeAndName
                 }
@@ -39,19 +39,15 @@ class ExchangeRepository @Inject constructor(val apiExchange: ApiExchange,
                                     } else {
                                         val ticker = jsonObject.getJSONObject("ticker")
                                         rate = ticker.getString("price")
-                                        insertToHistoryTable(firstName, secondName, rate.toFloat())
+                                        historyDao.insertOneRaw(HistoryEntity(firstName,
+                                                secondName,
+                                                rate.toFloat()))
                                     }
                                 } catch (e: JSONException) {
                                     e.printStackTrace()
                                 }
-
                                 value * (rate?.toFloat() ?: 0f)
                             }
                 }
-    }
-
-    private fun insertToHistoryTable(firstName: String, secondName: String, result: Float) {
-        val historyEntity = HistoryEntity(firstName, secondName, result)
-        historyDao.insertOneRaw(historyEntity)
     }
 }

@@ -1,7 +1,6 @@
 package com.examle.curexchange.data.remote
 
 import io.reactivex.Flowable
-import io.reactivex.processors.PublishProcessor
 import retrofit2.http.GET
 import retrofit2.http.Path
 

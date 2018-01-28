@@ -2,7 +2,6 @@ package com.examle.curexchange.data.database.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import android.arch.persistence.room.Query
 import com.examle.curexchange.data.database.entities.CurrencyConstants
@@ -27,5 +26,4 @@ interface CurrencyDao {
             + CurrencyConstants.COLUMN_CRYPTO_NAME + "=:arg0" + " OR "
             + CurrencyConstants.COLUMN_CRYPTO_NAME + "=:arg1")
     fun queryCryptoCodesByCryptoNames(firstCryptoName: String, secondCryptoName: String): Flowable<List<CurrencyEntity>>
-
 }

@@ -16,9 +16,7 @@ class CurrencyRepository @Inject constructor(val apiCryptoCode: ApiCryptoCode,
     var rows: MutableList<Row> = ArrayList()
     var currencyEntities: MutableList<CurrencyEntity> = ArrayList()
 
-    fun getNames(): Flowable<MutableList<String>> = queryData()
-
-    fun queryData(): Flowable<MutableList<String>> =
+    fun getNames(): Flowable<MutableList<String>> =
             currencyDao.queryOneLine()
                     .map { ignore -> false }
                     .switchIfEmpty(Maybe.just(true))
